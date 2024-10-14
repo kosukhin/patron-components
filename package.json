@@ -1,0 +1,57 @@
+{
+  "name": "patron-components",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "dist/patron-components.js",
+  "module": "dist/patron-components.mjs",
+  "typings": "dist/patron-components.d.ts",
+  "keywords": [
+    "oop",
+    "components"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "lint": "eslint src",
+    "lint-fix": "eslint src --fix",
+    "test": "vitest",
+    "cz": "git add . && git cz",
+    "test-debug": "env DEBUG=app:* vitest",
+    "release": "npm run build && standard-version --no-verify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kosukhin/patron-web-api.git"
+  },
+  "private": false,
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.12.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@typescript-eslint/eslint-plugin": "^8.8.1",
+    "@typescript-eslint/parser": "^8.8.1",
+    "cz-customizable": "^7.0.0",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.12.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "3.3.3",
+    "rollup": "^4.24.0",
+    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-esbuild": "^6.1.1",
+    "standard-version": "^9.5.0",
+    "vitest": "^2.1.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": "./commitizen.cjs"
+    }
+  },
+  "dependencies": {
+    "patron-oop": "^1.4.0",
+    "patron-web-api": "^1.2.0"
+  }
+}
