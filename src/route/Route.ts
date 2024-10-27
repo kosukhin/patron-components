@@ -1,14 +1,23 @@
-import {give, GuestChain, Patron, Source} from "patron-oop";
+import {give, GuestChain, GuestType, Patron, Source} from "patron-oop";
 import {HistoryCurrentPage, HistoryNewPage, HistoryPageDocument} from "patron-web-api";
 
-class Route {
+export interface RouteDocument {
+    url: string,
+    template: string,
+    page: {
+        mounted: () => void
+    },
+    default?: boolean,
+}
+
+export class Route {
     public constructor(
         private basePath: Source<string>,
         private currentPage: HistoryCurrentPage,
         private newPage: HistoryNewPage
     ) {}
 
-    public page(url) {
+    public page(url: string) {
         this.basePath.receiving(
             (basePath) => {
                 this.newPage.receive({
@@ -24,8 +33,8 @@ class Route {
     }
 
     public handleRoutes(
-        displaySelector,
-        routes,
+        displaySelector: string,
+        routes: RouteDocument[],
     ) {
         const contentEl = document.querySelector(displaySelector);
         const defaultRoute = routes.find(route => route.default);
@@ -45,7 +54,9 @@ class Route {
 
                             if (route) {
                                 fetch(basePath + '/' + route.template).then(result => result.text()).then(template => {
-                                    contentEl.innerHTML = template;
+                                    if (contentEl) {
+                                        contentEl.innerHTML = template;
+                                    }
                                     route.page?.mounted();
                                 });
                             }
@@ -56,7 +67,7 @@ class Route {
         );
     }
 
-    private firstLoad(guest) {
+    private firstLoad(guest: GuestType) {
         const chain = new GuestChain<any>();
         this.basePath.receiving(chain.receiveKey('basePath'));
         this.currentPage.page(chain.receiveKey('currentPage'));
