@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .menu ul {
+            padding: 0;
+            display: flex;
+            list-style-type: none;
+            gap: 12px;
+        }
+
+        .page-content {
+            max-width: 600px;
+        }
+    </style>
+</head>
+
+<body>
+<h1>Route</h1>
+<div class="menu">
+    <ul>
+        <li>
+            <button onclick="route.page('/')">
+                Главная
+            </button>
+        </li>
+        <li>
+            <button onclick="route.page('/two')">
+                Вторая
+            </button>
+        </li>
+        <li>
+            <button onclick="route.page('/three')">
+                Третья
+            </button>
+        </li>
+    </ul>
+</div>
+<div class="page-content"></div>
+<script type="module">
+  import 'https://cdn.jsdelivr.net/npm/patron-oop@1.10.0/dist/patron.min.js';
+  window.patronOop = window.GUEST_LIBRARY;
+  import {HistoryCurrentPage, HistoryNewPage} from 'https://cdn.jsdelivr.net/npm/patron-web-api@1.6.0/dist/patron-web-api.mjs';
+
+  const {
+    Source,
+  } = window.GUEST_LIBRARY;
+
+  class PageOne {
+    mounted() {
+      console.log('show page one');
+      document.title = 'Главная страница';
+    }
+  }
+
+  class PageTwo {
+    mounted() {
+      console.log('show page two');
+      document.title = 'Вторая страница';
+    }
+  }
+
+  class PageThree {
+    mounted() {
+      console.log('show page three');
+      document.title = 'Третья страница';
+    }
+  }
+
+  import('http://localhost:63342/patron-components/dist/patron-components.min.js').then(() => {
+    console.log('ok');
+    const {
+      Route,
+    } = window.GUEST_LIBRARY.components;
+
+    const pageSource = new Source({
+      title: 'Главная',
+      url: '/',
+    });
+    window.route = new Route(
+        new Source('/patron-web-api/examples/history-api/router/#'),
+        new HistoryCurrentPage(pageSource),
+        new HistoryNewPage(pageSource),
+    );
+    route.handleRoutes(
+        '.page-content',
+        [
+          {
+            url: '/',
+            template: 'main.html',
+            page: new PageOne(),
+            default: true,
+          },
+          {
+            url: '/two',
+            template: 'two.html',
+            page: new PageTwo(),
+          },
+          {
+            url: '/three',
+            template: 'three.html',
+            page: new PageThree(),
+          },
+        ],
+    );
+  })
+</script>
+</body>
+
+</html>
