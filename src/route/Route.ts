@@ -1,12 +1,13 @@
-import {give, GuestChain, GuestType, Patron, Source} from "patron-oop";
-import {HistoryCurrentPage, HistoryNewPage, HistoryPageDocument} from "patron-web-api";
+import { give, GuestChain, GuestType, Patron, Source } from "patron-oop";
+import { HistoryCurrentPage, HistoryNewPage, HistoryPageDocument } from "patron-web-api";
+import { RouteDisplayType } from "src/route/RouteDisplayType";
+import { RoutePageTransportType } from "src/route/RoutePageTransportType";
+import { RoutePageType } from "src/route/RoutePageType";
 
 export interface RouteDocument {
     url: string,
     template: string,
-    page: {
-        mounted: () => void
-    },
+    page: RoutePageType,
     default?: boolean,
 }
 
@@ -14,8 +15,10 @@ export class Route {
     public constructor(
         private basePath: Source<string>,
         private currentPage: HistoryCurrentPage,
-        private newPage: HistoryNewPage
-    ) {}
+        private newPage: HistoryNewPage,
+        private display: RouteDisplayType,
+        private pageTransport: RoutePageTransportType,
+    ) { }
 
     public page(url: string) {
         this.basePath.receiving(
@@ -32,11 +35,7 @@ export class Route {
         );
     }
 
-    public handleRoutes(
-        displaySelector: string,
-        routes: RouteDocument[],
-    ) {
-        const contentEl = document.querySelector(displaySelector);
+    public handleRoutes(routes: RouteDocument[]) {
         const defaultRoute = routes.find(route => route.default);
         this.firstLoad(
             () => {
@@ -53,12 +52,14 @@ export class Route {
                             }
 
                             if (route) {
-                                fetch(basePath + '/' + route.template).then(result => result.text()).then(template => {
-                                    if (contentEl) {
-                                        contentEl.innerHTML = template;
+                                this.pageTransport.content(
+                                    basePath,
+                                    route.template,
+                                    (templateContent) => {
+                                        this.display.display(templateContent);
+                                        route.page.mounted();
                                     }
-                                    route.page?.mounted();
-                                });
+                                );
                             }
                         },
                     );
@@ -71,17 +72,10 @@ export class Route {
         const chain = new GuestChain<any>();
         this.basePath.receiving(chain.receiveKey('basePath'));
         this.currentPage.page(chain.receiveKey('currentPage'));
-        chain.result(
-            ({basePath, currentPage}) => {
-                const correctUrl = location.href.replace(location.origin, '');
-
-                if (currentPage.url !== correctUrl) {
-                    this.page(correctUrl.replace(basePath, ''));
-                    setTimeout(() => {
-                        give(null, guest);
-                    });
-                }
-            },
-        );
+        chain.result(() => {
+            setTimeout(() => {
+                give(null, guest);
+            });
+        });
     }
 }

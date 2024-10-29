@@ -41,73 +41,72 @@
     </ul>
 </div>
 <div class="page-content"></div>
+<script type="importmap">
+    {
+      "imports": {
+        "patron-oop": "https://cdn.jsdelivr.net/npm/patron-oop@1.10.0/dist/patron.mjs"
+      }
+    }
+  </script>
 <script type="module">
-  import 'https://cdn.jsdelivr.net/npm/patron-oop@1.10.0/dist/patron.min.js';
-  window.patronOop = window.GUEST_LIBRARY;
-  import {HistoryCurrentPage, HistoryNewPage} from 'https://cdn.jsdelivr.net/npm/patron-web-api@1.6.0/dist/patron-web-api.mjs';
+    import {Source} from 'patron-oop';
+    import {
+        HistoryCurrentPage,
+        HistoryNewPage
+    } from 'https://cdn.jsdelivr.net/npm/patron-web-api@1.6.0/dist/patron-web-api.mjs';
+    import {Route} from 'http://localhost:5500/dist/patron-components.mjs';
 
-  const {
-    Source,
-  } = window.GUEST_LIBRARY;
-
-  class PageOne {
-    mounted() {
-      console.log('show page one');
-      document.title = 'Главная страница';
+    class PageOne {
+        mounted() {
+            console.log('show page one');
+            document.title = 'Главная страница';
+        }
     }
-  }
 
-  class PageTwo {
-    mounted() {
-      console.log('show page two');
-      document.title = 'Вторая страница';
+    class PageTwo {
+        mounted() {
+            console.log('show page two');
+            document.title = 'Вторая страница';
+        }
     }
-  }
 
-  class PageThree {
-    mounted() {
-      console.log('show page three');
-      document.title = 'Третья страница';
+    class PageThree {
+        mounted() {
+            console.log('show page three');
+            document.title = 'Третья страница';
+        }
     }
-  }
-
-  import('http://localhost:63342/patron-components/dist/patron-components.min.js').then(() => {
-    console.log('ok');
-    const {
-      Route,
-    } = window.GUEST_LIBRARY.components;
 
     const pageSource = new Source({
-      title: 'Главная',
-      url: '/',
+        title: 'Главная',
+        url: '/',
     });
     window.route = new Route(
-        new Source('/patron-web-api/examples/history-api/router/#'),
+        new Source('/examples/router/#'),
         new HistoryCurrentPage(pageSource),
         new HistoryNewPage(pageSource),
     );
     route.handleRoutes(
         '.page-content',
         [
-          {
-            url: '/',
-            template: 'main.html',
-            page: new PageOne(),
-            default: true,
-          },
-          {
-            url: '/two',
-            template: 'two.html',
-            page: new PageTwo(),
-          },
-          {
-            url: '/three',
-            template: 'three.html',
-            page: new PageThree(),
-          },
+            {
+                url: '/',
+                template: 'main.html',
+                page: new PageOne(),
+                default: true,
+            },
+            {
+                url: '/two',
+                template: 'two.html',
+                page: new PageTwo(),
+            },
+            {
+                url: '/three',
+                template: 'three.html',
+                page: new PageThree(),
+            },
         ],
     );
-  })
 </script>
 </body>
 
