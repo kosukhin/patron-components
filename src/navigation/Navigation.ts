@@ -1,7 +1,7 @@
-import { give, GuestChain, GuestType, Patron, Source, FactoryType } from "patron-oop";
-import { HistoryCurrentPage, HistoryNewPage, HistoryPageDocument } from "patron-web-api";
-import { RouteDisplayType } from "src/navigation/RouteDisplay";
+import { FactoryType, give, GuestChain, GuestType, Patron, Source } from "patron-oop";
+import { HistoryCurrentPage, HistoryNewPage } from "patron-web-api";
 import { RoutePageTransportType } from "src/navigation/PageFetchTransport";
+import { RouteDisplayType } from "src/navigation/RouteDisplay";
 import { RoutePageType } from "src/navigation/RoutePageType";
 
 export interface RouteDocument {
@@ -28,7 +28,7 @@ export class Navigation {
                 title: 'Идет загрузка',
                 data: {
                     url: `${basePath}${url}`,
-                    date: new Date().getTime(),
+                    date: Date.now(),
                 },
             } as any);
         });

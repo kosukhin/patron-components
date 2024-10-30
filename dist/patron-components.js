@@ -16,7 +16,7 @@ class PageFetchTransport {
   }
 }
 
-class Route {
+class Navigation {
   constructor(loading, basePath, currentPage, newPage, display, pageTransport) {
     this.loading = loading;
     this.basePath = basePath;
@@ -32,7 +32,7 @@ class Route {
         title: "\u0418\u0434\u0435\u0442 \u0437\u0430\u0433\u0440\u0443\u0437\u043A\u0430",
         data: {
           url: `${basePath}${url}`,
-          date: (/* @__PURE__ */ new Date()).getTime()
+          date: Date.now()
         }
       });
     });
@@ -90,7 +90,87 @@ class RouteDisplay {
   }
 }
 
+class CurrentPage {
+  receiving(guest) {
+    const correctUrl = location.href.replace(location.origin, "");
+    patronOop.give(
+      {
+        title: "Loading",
+        url: correctUrl
+      },
+      guest
+    );
+    return guest;
+  }
+}
+
+class Input {
+  constructor(source, selector) {
+    this.source = source;
+    const el = document.querySelector(selector);
+    this.source.receiving(
+      new patronOop.Patron((value) => {
+        el.value = String(value);
+      })
+    );
+    el.addEventListener("keyup", () => {
+      this.receive(el.value);
+    });
+    el.addEventListener("change", (e) => {
+      this.receive(el.value);
+    });
+  }
+  receiving(guest) {
+    this.source.receiving(guest);
+    return this;
+  }
+  receive(value) {
+    this.source.receive(value);
+    return this;
+  }
+}
+
+class Visible {
+  constructor(selector) {
+    this.selector = selector;
+  }
+  receive(isVisible) {
+    const el = document.querySelector(this.selector);
+    if (el) {
+      el.style.display = isVisible ? "block" : "none";
+    }
+    return this;
+  }
+}
+
+class Text {
+  constructor(selector) {
+    this.selector = selector;
+  }
+  receive(value) {
+    const element = document.querySelector(this.selector);
+    if (element) {
+      element.innerText = String(value);
+    }
+    return this;
+  }
+}
+
+class Page {
+  constructor(title) {
+    this.title = title;
+  }
+  mounted() {
+    document.title = this.title;
+  }
+}
+
+exports.CurrentPage = CurrentPage;
+exports.Input = Input;
+exports.Navigation = Navigation;
+exports.Page = Page;
 exports.PageFetchTransport = PageFetchTransport;
-exports.Route = Route;
 exports.RouteDisplay = RouteDisplay;
+exports.Text = Text;
+exports.Visible = Visible;
 //# sourceMappingURL=patron-components.js.map

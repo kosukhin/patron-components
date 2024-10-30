@@ -20,29 +20,33 @@
 </head>
 
 <body>
-<h1>Route</h1>
-<div class="menu">
-    <ul>
-        <li>
-            <button onclick="route.page('/')">
-                Главная
-            </button>
-        </li>
-        <li>
-            <button onclick="route.page('/two')">
-                Вторая
-            </button>
-        </li>
-        <li>
-            <button onclick="route.page('/three')">
-                Третья
-            </button>
-        </li>
-    </ul>
-</div>
-<div class="loader">Идет загрузка</div>
-<div class="page-content"></div>
-<script type="importmap">
+    <h1>Navigation</h1>
+    <div>
+        <input placeholder="Поиск" class="search-input" type="text" />
+    </div>
+    <div class="search-result"></div>
+    <div class="menu">
+        <ul>
+            <li>
+                <button onclick="navigation.page('/')">
+                    Главная
+                </button>
+            </li>
+            <li>
+                <button onclick="navigation.page('/two')">
+                    Вторая
+                </button>
+            </li>
+            <li>
+                <button onclick="navigation.page('/three')">
+                    Третья
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="loader">Идет загрузка</div>
+    <div class="page-content"></div>
+    <script type="importmap">
     {
       "imports": {
         "patron-oop": "https://cdn.jsdelivr.net/npm/patron-oop@1.13.0/dist/patron.mjs",
@@ -51,50 +55,53 @@
       }
     }
   </script>
-<script type="module">
-    import {Source, Factory, Patron} from 'patron-oop';
-    import {
-        HistoryCurrentPage,
-        HistoryNewPage
-    } from 'patron-web-api';
-    import {Route, RouteDisplay, PageFetchTransport} from 'patron-components';
+    <script type="module">
+        import { Source, Factory, Patron } from 'patron-oop';
+        import {
+            HistoryCurrentPage,
+            HistoryNewPage
+        } from 'patron-web-api';
+        import { Navigation, Visible, Text, Input, Page, RouteDisplay, PageFetchTransport, CurrentPage } from 'patron-components';
 
-    const pageLoading = new Source(false);
-    new VisibleElement(pageLoading, '.loader').watch();
+        const searchInput = new Input(new Source(''), '.search-input');
+        searchInput.receiving(new Patron(new Text('.search-result')));
 
-    const pageSource = new Source({
-        title: 'Главная',
-        url: '/',
-    });
-    window.route = new Route(
-        pageLoading,
-        new Source('/examples/router/#'),
-        new HistoryCurrentPage(pageSource),
-        new HistoryNewPage(pageSource),
-        new RouteDisplay('.page-content'),
-        new Factory(PageFetchTransport)
-    );
-    route.routes(
-        [
-            {
-                url: '/',
-                template: 'main.html',
-                page: new Page('Главная страница'),
-                default: true,
-            },
-            {
-                url: '/two',
-                template: 'two.html',
-                page: new Page('Вторая страница'),
-            },
-            {
-                url: '/three',
-                template: 'three.html',
-                page: new Page('Третья страница'),
-            },
-        ],
-    );
-</script>
+        const pageLoading = new Source(false);
+        pageLoading.receiving(new Patron(new Visible('.loader')));
+
+        const currentPage = new CurrentPage();
+        const pageSource = new Source();
+        currentPage.receiving(pageSource);
+
+        window.navigation = new Navigation(
+            pageLoading,
+            new Source('/examples/router/#'),
+            new HistoryCurrentPage(pageSource),
+            new HistoryNewPage(pageSource),
+            new RouteDisplay('.page-content'),
+            new Factory(PageFetchTransport)
+        );
+        navigation.routes(
+            [
+                {
+                    url: '/',
+                    template: 'main.html',
+                    page: new Page('Главная страница'),
+                    default: true,
+                },
+                {
+                    url: '/two',
+                    template: 'two.html',
+                    page: new Page('Вторая страница'),
+                },
+                {
+                    url: '/three',
+                    template: 'three.html',
+                    page: new Page('Третья страница'),
+                },
+            ],
+        );
+    </script>
 </body>
 
 </html>
