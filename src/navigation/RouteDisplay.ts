@@ -1,4 +1,6 @@
-import { RouteDisplayType } from "src/route/RouteDisplayType";
+export interface RouteDisplayType {
+    display(content: string): void;
+}
 
 export class RouteDisplay implements RouteDisplayType {
     public constructor(private selector: string) {}

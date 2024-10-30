@@ -40,70 +40,57 @@
         </li>
     </ul>
 </div>
+<div class="loader">Идет загрузка</div>
 <div class="page-content"></div>
 <script type="importmap">
     {
       "imports": {
-        "patron-oop": "https://cdn.jsdelivr.net/npm/patron-oop@1.10.0/dist/patron.mjs"
+        "patron-oop": "https://cdn.jsdelivr.net/npm/patron-oop@1.13.0/dist/patron.mjs",
+        "patron-web-api": "https://cdn.jsdelivr.net/npm/patron-web-api@1.6.0/dist/patron-web-api.mjs",
+        "patron-components": "http://localhost:5500/dist/patron-components.mjs"
       }
     }
   </script>
 <script type="module">
-    import {Source} from 'patron-oop';
+    import {Source, Factory, Patron} from 'patron-oop';
     import {
         HistoryCurrentPage,
         HistoryNewPage
-    } from 'https://cdn.jsdelivr.net/npm/patron-web-api@1.6.0/dist/patron-web-api.mjs';
-    import {Route} from 'http://localhost:5500/dist/patron-components.mjs';
+    } from 'patron-web-api';
+    import {Route, RouteDisplay, PageFetchTransport} from 'patron-components';
 
-    class PageOne {
-        mounted() {
-            console.log('show page one');
-            document.title = 'Главная страница';
-        }
-    }
-
-    class PageTwo {
-        mounted() {
-            console.log('show page two');
-            document.title = 'Вторая страница';
-        }
-    }
-
-    class PageThree {
-        mounted() {
-            console.log('show page three');
-            document.title = 'Третья страница';
-        }
-    }
+    const pageLoading = new Source(false);
+    new VisibleElement(pageLoading, '.loader').watch();
 
     const pageSource = new Source({
         title: 'Главная',
         url: '/',
     });
     window.route = new Route(
+        pageLoading,
         new Source('/examples/router/#'),
         new HistoryCurrentPage(pageSource),
         new HistoryNewPage(pageSource),
+        new RouteDisplay('.page-content'),
+        new Factory(PageFetchTransport)
     );
-    route.handleRoutes(
-        '.page-content',
+    route.routes(
         [
             {
                 url: '/',
                 template: 'main.html',
-                page: new PageOne(),
+                page: new Page('Главная страница'),
                 default: true,
             },
             {
                 url: '/two',
                 template: 'two.html',
-                page: new PageTwo(),
+                page: new Page('Вторая страница'),
             },
             {
                 url: '/three',
                 template: 'three.html',
-                page: new PageThree(),
+                page: new Page('Третья страница'),
             },
         ],
     );
