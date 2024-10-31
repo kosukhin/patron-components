@@ -84,14 +84,12 @@ class CurrentPage {
     this.source.receive(correctUrl);
   }
   receive(value) {
-    console.log("cp receive", value);
     this.source.receive(value);
     return this;
   }
   receiving(guest) {
     this.source.receiving(
       new patronOop.GuestMiddle(guest, (url) => {
-        console.log("cp receiving", url);
         patronOop.give(
           {
             title: "Loading",
@@ -183,6 +181,38 @@ class Link {
   }
 }
 
+class ComputedElement {
+  constructor(sources, selectorTemplate) {
+    this.sources = sources;
+    this.selectorTemplate = selectorTemplate;
+  }
+  element(guest) {
+    const chain = new patronOop.GuestChain();
+    this.sources.forEach((source) => {
+      source.source.receiving(
+        new patronOop.GuestCast(guest, chain.receiveKey(source.placeholder))
+      );
+    });
+    chain.result(
+      new patronOop.GuestMiddle(
+        guest,
+        (placeholders) => {
+          let selectorTemplate = this.selectorTemplate;
+          Object.entries(placeholders).map((entry) => {
+            selectorTemplate = selectorTemplate.replaceAll(entry[0], entry[1]);
+          });
+          const element = document.querySelector(
+            selectorTemplate
+          );
+          if (element) {
+            patronOop.give(element, guest);
+          }
+        }
+      )
+    );
+  }
+}
+
 class Page {
   constructor(title) {
     this.title = title;
@@ -192,6 +222,7 @@ class Page {
   }
 }
 
+exports.ComputedElement = ComputedElement;
 exports.CurrentPage = CurrentPage;
 exports.Input = Input;
 exports.Link = Link;

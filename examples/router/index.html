@@ -16,6 +16,10 @@
         .page-content {
             max-width: 600px;
         }
+
+        .active {
+            background: red;
+        }
     </style>
 </head>
 
@@ -25,6 +29,8 @@
         <input placeholder="Поиск" class="search-input" type="text" />
     </div>
     <div class="search-result"></div>
+    <br />
+    <div class="current-url">Текущий URL</div>
     <div class="menu">
         <ul>
             <li>
@@ -50,18 +56,18 @@
     {
       "imports": {
         "patron-oop": "https://cdn.jsdelivr.net/npm/patron-oop@1.13.0/dist/patron.mjs",
-        "patron-web-api": "https://cdn.jsdelivr.net/npm/patron-web-api@1.7.0/dist/patron-web-api.mjs",
+        "patron-web-api": "http://127.0.0.1:5501/dist/patron-web-api.mjs",
         "patron-components": "http://localhost:5500/dist/patron-components.mjs"
       }
     }
   </script>
     <script type="module">
-        import { Source, Factory, Patron } from 'patron-oop';
+        import { Source, Factory, Patron, GuestAware, GuestMiddle, give } from 'patron-oop';
         import {
             HistoryCurrentPage,
             HistoryNewPage
         } from 'patron-web-api';
-        import { Navigation, Visible, Text, Input, Link, Page, RouteDisplay, PageFetchTransport, CurrentPage } from 'patron-components';
+        import { Navigation, Visible, Text, Input, Link, Page, RouteDisplay, PageFetchTransport, CurrentPage, ComputedElement } from 'patron-components';
 
         const searchInput = new Input(new Source(''), '.search-input');
         searchInput.receiving(new Patron(new Text('.search-result')));
@@ -106,6 +112,27 @@
 
         const link = new Link(currentPage, basePathSource);
         link.watchClick('.menu');
+
+        const url = new GuestAware((guest) => {
+            basePathSource.receiving(new GuestMiddle(guest, (basePath) => {
+                pageSource.receiving(new GuestMiddle(guest, (page) => {
+                    const url = page.url ?? ''
+                    give(url.replace(basePath, ''), guest);
+                }));
+            }));
+        });
+        url.receiving(new Patron(new Text('.current-url')));
+
+        const activeLink = new ComputedElement(
+            [{ source: url, placeholder: '{url}' }],
+            '.menu a[href="{url}"]'
+        );
+        activeLink.element(new Patron((element) => {
+            document.querySelectorAll('.menu a').forEach(el => {
+                el.classList.remove('active');
+            })
+            element.classList.add('active');
+        }));
     </script>
 </body>
 

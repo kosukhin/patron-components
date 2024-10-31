@@ -1,4 +1,4 @@
-import { give, Patron, GuestChain, Source, GuestMiddle } from 'patron-oop';
+import { give, Patron, GuestChain, Source, GuestMiddle, GuestCast } from 'patron-oop';
 
 class PageFetchTransport {
   constructor(basePath, template) {
@@ -82,14 +82,12 @@ class CurrentPage {
     this.source.receive(correctUrl);
   }
   receive(value) {
-    console.log("cp receive", value);
     this.source.receive(value);
     return this;
   }
   receiving(guest) {
     this.source.receiving(
       new GuestMiddle(guest, (url) => {
-        console.log("cp receiving", url);
         give(
           {
             title: "Loading",
@@ -181,6 +179,38 @@ class Link {
   }
 }
 
+class ComputedElement {
+  constructor(sources, selectorTemplate) {
+    this.sources = sources;
+    this.selectorTemplate = selectorTemplate;
+  }
+  element(guest) {
+    const chain = new GuestChain();
+    this.sources.forEach((source) => {
+      source.source.receiving(
+        new GuestCast(guest, chain.receiveKey(source.placeholder))
+      );
+    });
+    chain.result(
+      new GuestMiddle(
+        guest,
+        (placeholders) => {
+          let selectorTemplate = this.selectorTemplate;
+          Object.entries(placeholders).map((entry) => {
+            selectorTemplate = selectorTemplate.replaceAll(entry[0], entry[1]);
+          });
+          const element = document.querySelector(
+            selectorTemplate
+          );
+          if (element) {
+            give(element, guest);
+          }
+        }
+      )
+    );
+  }
+}
+
 class Page {
   constructor(title) {
     this.title = title;
@@ -190,5 +220,5 @@ class Page {
   }
 }
 
-export { CurrentPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, Text, Visible };
+export { ComputedElement, CurrentPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, Text, Visible };
 //# sourceMappingURL=patron-components.mjs.map

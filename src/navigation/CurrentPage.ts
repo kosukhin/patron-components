@@ -19,8 +19,6 @@ export class CurrentPage
   }
 
   public receive(value: string): this {
-    console.log("cp receive", value);
-
     this.source.receive(value);
     return this;
   }
@@ -28,8 +26,6 @@ export class CurrentPage
   public receiving(guest: GuestType<HistoryPageDocument>) {
     this.source.receiving(
       new GuestMiddle(guest as GuestType<unknown>, (url) => {
-        console.log("cp receiving", url);
-
         give(
           {
             title: "Loading",

@@ -78,10 +78,21 @@ declare class Link {
     watchClick(selector: string): void;
 }
 
+type SourceDetailType = {
+    source: GuestAwareType;
+    placeholder: string;
+};
+declare class ComputedElement {
+    private sources;
+    private selectorTemplate;
+    constructor(sources: SourceDetailType[], selectorTemplate: string);
+    element(guest: GuestType<HTMLElement>): void;
+}
+
 declare class Page {
     private title;
     constructor(title: string);
     mounted(): void;
 }
 
-export { CurrentPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, type RouteDisplayType, type RouteDocument, type RoutePageTransportType, type RoutePageType, Text, Visible };
+export { ComputedElement, CurrentPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, type RouteDisplayType, type RouteDocument, type RoutePageTransportType, type RoutePageType, Text, Visible };
