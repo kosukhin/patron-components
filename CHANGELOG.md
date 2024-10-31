@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/kosukhin/patron-web-api/compare/v1.4.0...v1.5.0) (2024-10-31)
+
+
+### Features
+
+* **main:** добавить publish скрипт ([0408b81](https://github.com/kosukhin/patron-web-api/commit/0408b81e8ef94a6bfbe99d27f4decf938f1494b2))
+* **main:** доделал роутинг и базовые компоненты ([7135b1b](https://github.com/kosukhin/patron-web-api/commit/7135b1b0211d0026a5865092ed590cedd4250d30))
+* **main:** нарабокти по навигации ([335c1b4](https://github.com/kosukhin/patron-web-api/commit/335c1b48e3f336dbce7496d6e5ca74c5c9115055))
+
 ## 1.4.0 (2024-10-30)
 
 
