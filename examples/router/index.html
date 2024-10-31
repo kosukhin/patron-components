@@ -28,19 +28,19 @@
     <div class="menu">
         <ul>
             <li>
-                <button onclick="navigation.page('/')">
+                <a href="/">
                     Главная
-                </button>
+                </a>
             </li>
             <li>
-                <button onclick="navigation.page('/two')">
+                <a href="/two">
                     Вторая
-                </button>
+                </a>
             </li>
             <li>
-                <button onclick="navigation.page('/three')">
+                <a href="/three">
                     Третья
-                </button>
+                </a>
             </li>
         </ul>
     </div>
@@ -50,7 +50,7 @@
     {
       "imports": {
         "patron-oop": "https://cdn.jsdelivr.net/npm/patron-oop@1.13.0/dist/patron.mjs",
-        "patron-web-api": "https://cdn.jsdelivr.net/npm/patron-web-api@1.6.0/dist/patron-web-api.mjs",
+        "patron-web-api": "https://cdn.jsdelivr.net/npm/patron-web-api@1.7.0/dist/patron-web-api.mjs",
         "patron-components": "http://localhost:5500/dist/patron-components.mjs"
       }
     }
@@ -61,7 +61,7 @@
             HistoryCurrentPage,
             HistoryNewPage
         } from 'patron-web-api';
-        import { Navigation, Visible, Text, Input, Page, RouteDisplay, PageFetchTransport, CurrentPage } from 'patron-components';
+        import { Navigation, Visible, Text, Input, Link, Page, RouteDisplay, PageFetchTransport, CurrentPage } from 'patron-components';
 
         const searchInput = new Input(new Source(''), '.search-input');
         searchInput.receiving(new Patron(new Text('.search-result')));
@@ -69,15 +69,17 @@
         const pageLoading = new Source(false);
         pageLoading.receiving(new Patron(new Visible('.loader')));
 
-        const currentPage = new CurrentPage();
         const pageSource = new Source();
-        currentPage.receiving(pageSource);
+        const currentPage = new CurrentPage();
+        currentPage.receiving(new Patron(pageSource));
+        pageSource.receiving(new Patron(new HistoryNewPage()));
 
-        window.navigation = new Navigation(
+        const basePathSource = new Source('/examples/router/#');
+
+        const navigation = new Navigation(
             pageLoading,
-            new Source('/examples/router/#'),
+            basePathSource,
             new HistoryCurrentPage(pageSource),
-            new HistoryNewPage(pageSource),
             new RouteDisplay('.page-content'),
             new Factory(PageFetchTransport)
         );
@@ -101,6 +103,9 @@
                 },
             ],
         );
+
+        const link = new Link(currentPage, basePathSource);
+        link.watchClick('.menu');
     </script>
 </body>
 

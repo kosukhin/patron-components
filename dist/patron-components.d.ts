@@ -1,5 +1,5 @@
-import { GuestType, Source, FactoryType, GuestAwareType, SourceType, GuestObjectType } from 'patron-oop';
-import { HistoryCurrentPage, HistoryNewPage, HistoryPageDocument } from 'patron-web-api';
+import { GuestType, Source, FactoryType, GuestAwareType, GuestObjectType, SourceType } from 'patron-oop';
+import { HistoryCurrentPage, HistoryPageDocument } from 'patron-web-api';
 import { RoutePageTransportType as RoutePageTransportType$1 } from 'src/navigation/PageFetchTransport';
 import { RouteDisplayType as RouteDisplayType$1 } from 'src/navigation/RouteDisplay';
 import { RoutePageType as RoutePageType$1 } from 'src/navigation/RoutePageType';
@@ -24,11 +24,9 @@ declare class Navigation {
     private loading;
     private basePath;
     private currentPage;
-    private newPage;
     private display;
     private pageTransport;
-    constructor(loading: Source<boolean>, basePath: Source<string>, currentPage: HistoryCurrentPage, newPage: HistoryNewPage, display: RouteDisplayType$1, pageTransport: FactoryType<RoutePageTransportType$1>);
-    page(url: string): void;
+    constructor(loading: Source<boolean>, basePath: Source<string>, currentPage: HistoryCurrentPage, display: RouteDisplayType$1, pageTransport: FactoryType<RoutePageTransportType$1>);
     routes(routes: RouteDocument[]): void;
     private firstLoad;
 }
@@ -46,7 +44,10 @@ interface RoutePageType {
     mounted(): void;
 }
 
-declare class CurrentPage implements GuestAwareType<HistoryPageDocument> {
+declare class CurrentPage implements GuestAwareType<HistoryPageDocument>, GuestObjectType<string> {
+    private source;
+    constructor();
+    receive(value: string): this;
     receiving(guest: GuestType<HistoryPageDocument>): GuestType<HistoryPageDocument>;
 }
 
@@ -70,10 +71,17 @@ declare class Text implements GuestObjectType {
     receive(value: unknown): this;
 }
 
+declare class Link {
+    private linkSource;
+    private basePath;
+    constructor(linkSource: GuestObjectType<string>, basePath: SourceType<string>);
+    watchClick(selector: string): void;
+}
+
 declare class Page {
     private title;
     constructor(title: string);
     mounted(): void;
 }
 
-export { CurrentPage, Input, Navigation, Page, PageFetchTransport, RouteDisplay, type RouteDisplayType, type RouteDocument, type RoutePageTransportType, type RoutePageType, Text, Visible };
+export { CurrentPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, type RouteDisplayType, type RouteDocument, type RoutePageTransportType, type RoutePageType, Text, Visible };
