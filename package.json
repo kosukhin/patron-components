@@ -17,7 +17,8 @@
     "test": "vitest",
     "cz": "git add . && git cz",
     "test-debug": "env DEBUG=app:* vitest",
-    "release": "npm run build && standard-version --no-verify"
+    "release": "npm run build && standard-version --no-verify",
+    "publish": "npm publish"
   },
   "repository": {
     "type": "git",
