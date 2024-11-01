@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/kosukhin/patron-web-api/compare/v1.5.0...v1.6.0) (2024-11-01)
+
+
+### Features
+
+* **main:** исправление явных ошибок в Navigation классе ([5d21632](https://github.com/kosukhin/patron-web-api/commit/5d21632956df0bed0a19795326b60d0449c51913))
+* **main:** улучшения логики и форматирования ([e000995](https://github.com/kosukhin/patron-web-api/commit/e000995185132a225903034e20800bdbc0bc9ff1))
+
 ## [1.5.0](https://github.com/kosukhin/patron-web-api/compare/v1.4.0...v1.5.0) (2024-10-31)
 
 
