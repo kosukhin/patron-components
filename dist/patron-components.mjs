@@ -77,13 +77,13 @@ var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { en
 var __publicField = (obj, key, value) => __defNormalProp(obj, key + "" , value);
 class CurrentPage {
   constructor() {
-    __publicField(this, "source", new Source("/"));
+    __publicField(this, "source");
     const correctUrl = location.href.replace(location.origin, "");
     console.log("url from consttructor", correctUrl);
-    this.source.receive(correctUrl);
+    this.source = new Source(correctUrl);
   }
   receive(value) {
-    console.log("receive ourside");
+    console.log("receive outside");
     this.source.receive(value);
     return this;
   }
