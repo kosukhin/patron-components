@@ -1,5 +1,5 @@
-import { GuestType, Source, FactoryType, GuestAwareType, GuestObjectType, SourceType } from 'patron-oop';
-import { HistoryCurrentPage, HistoryPageDocument } from 'patron-web-api';
+import { GuestType, SourceType, FactoryType, GuestAwareType, GuestObjectType } from 'patron-oop';
+import { HistoryPageDocument } from 'patron-web-api';
 import { RoutePageTransportType as RoutePageTransportType$1 } from 'src/navigation/PageFetchTransport';
 import { RouteDisplayType as RouteDisplayType$1 } from 'src/navigation/RouteDisplay';
 import { RoutePageType as RoutePageType$1 } from 'src/navigation/RoutePageType';
@@ -26,7 +26,7 @@ declare class Navigation {
     private currentPage;
     private display;
     private pageTransport;
-    constructor(loading: Source<boolean>, basePath: Source<string>, currentPage: HistoryCurrentPage, display: RouteDisplayType$1, pageTransport: FactoryType<RoutePageTransportType$1>);
+    constructor(loading: SourceType<boolean>, basePath: SourceType<string>, currentPage: SourceType<HistoryPageDocument>, display: RouteDisplayType$1, pageTransport: FactoryType<RoutePageTransportType$1>);
     routes(routes: RouteDocument[]): void;
     private firstLoad;
 }
@@ -89,10 +89,17 @@ declare class ComputedElement {
     element(guest: GuestType<HTMLElement>): void;
 }
 
+declare class ClassToggle implements GuestObjectType<HTMLElement> {
+    private toggleClass;
+    private resetClassSelector;
+    constructor(toggleClass: string, resetClassSelector: string);
+    receive(element: HTMLElement): this;
+}
+
 declare class Page {
     private title;
     constructor(title: string);
     mounted(): void;
 }
 
-export { ComputedElement, CurrentPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, type RouteDisplayType, type RouteDocument, type RoutePageTransportType, type RoutePageType, Text, Visible };
+export { ClassToggle, ComputedElement, CurrentPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, type RouteDisplayType, type RouteDocument, type RoutePageTransportType, type RoutePageType, Text, Visible };

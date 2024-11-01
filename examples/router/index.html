@@ -55,19 +55,31 @@
     <script type="importmap">
     {
       "imports": {
-        "patron-oop": "https://cdn.jsdelivr.net/npm/patron-oop@1.13.0/dist/patron.mjs",
-        "patron-web-api": "http://127.0.0.1:5501/dist/patron-web-api.mjs",
-        "patron-components": "http://localhost:5500/dist/patron-components.mjs"
+        "patron-oop": "http://127.0.0.1:5502/dist/patron.min.mjs",
+        "patron-web-api": "http://127.0.0.1:5501/dist/patron-web-api.min.mjs",
+        "patron-components": "http://localhost:5500/dist/patron-components.min.mjs"
       }
     }
   </script>
     <script type="module">
-        import { Source, Factory, Patron, GuestAware, GuestMiddle, give } from 'patron-oop';
+        import { Source, SourceEmpty, Factory, Patron, GuestAware, GuestMiddle, give } from 'patron-oop';
         import {
-            HistoryCurrentPage,
+            HistoryPoppedPage,
             HistoryNewPage
         } from 'patron-web-api';
-        import { Navigation, Visible, Text, Input, Link, Page, RouteDisplay, PageFetchTransport, CurrentPage, ComputedElement } from 'patron-components';
+        import {
+            Navigation,
+            Visible,
+            Text,
+            Input,
+            Link,
+            Page,
+            RouteDisplay,
+            PageFetchTransport,
+            CurrentPage,
+            ComputedElement,
+            ClassToggle
+        } from 'patron-components';
 
         const searchInput = new Input(new Source(''), '.search-input');
         searchInput.receiving(new Patron(new Text('.search-result')));
@@ -75,17 +87,20 @@
         const pageLoading = new Source(false);
         pageLoading.receiving(new Patron(new Visible('.loader')));
 
-        const pageSource = new Source();
+        const pageSource = new SourceEmpty();
         const currentPage = new CurrentPage();
         currentPage.receiving(new Patron(pageSource));
         pageSource.receiving(new Patron(new HistoryNewPage()));
+
+        const historyPoppedPage = new HistoryPoppedPage(pageSource);
+        historyPoppedPage.watchPop();
 
         const basePathSource = new Source('/examples/router/#');
 
         const navigation = new Navigation(
             pageLoading,
             basePathSource,
-            new HistoryCurrentPage(pageSource),
+            pageSource,
             new RouteDisplay('.page-content'),
             new Factory(PageFetchTransport)
         );
@@ -127,12 +142,7 @@
             [{ source: url, placeholder: '{url}' }],
             '.menu a[href="{url}"]'
         );
-        activeLink.element(new Patron((element) => {
-            document.querySelectorAll('.menu a').forEach(el => {
-                el.classList.remove('active');
-            })
-            element.classList.add('active');
-        }));
+        activeLink.element(new Patron(new ClassToggle('active', '.menu a')));
     </script>
 </body>
 

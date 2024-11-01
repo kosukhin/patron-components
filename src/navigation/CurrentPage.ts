@@ -15,10 +15,14 @@ export class CurrentPage
 
   public constructor() {
     const correctUrl = location.href.replace(location.origin, "");
+    console.log("url from consttructor", correctUrl);
+
     this.source.receive(correctUrl);
   }
 
   public receive(value: string): this {
+    console.log("receive ourside");
+
     this.source.receive(value);
     return this;
   }
@@ -26,6 +30,8 @@ export class CurrentPage
   public receiving(guest: GuestType<HistoryPageDocument>) {
     this.source.receiving(
       new GuestMiddle(guest as GuestType<unknown>, (url) => {
+        console.trace("new url is", url);
+
         give(
           {
             title: "Loading",

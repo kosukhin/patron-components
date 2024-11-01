@@ -25,6 +25,12 @@ export default [
         sourcemap: true,
       },
       {
+        file: `${name}.min.mjs`,
+        format: "es",
+        plugins: [terser()],
+        sourcemap: true,
+      },
+      {
         file: `${name}.min.js`,
         format: "iife",
         plugins: [terser()],

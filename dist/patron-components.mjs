@@ -25,7 +25,7 @@ class Navigation {
   routes(routes) {
     const defaultRoute = routes.find((route) => route.default);
     this.firstLoad(() => {
-      this.currentPage.page(
+      this.currentPage.receiving(
         new Patron((value) => {
           this.loading.receive(true);
           this.basePath.receiving((basePath) => {
@@ -53,7 +53,7 @@ class Navigation {
   firstLoad(guest) {
     const chain = new GuestChain();
     this.basePath.receiving(chain.receiveKey("basePath"));
-    this.currentPage.page(chain.receiveKey("currentPage"));
+    this.currentPage.receiving(chain.receiveKey("currentPage"));
     chain.result(() => {
       give(null, guest);
     });
@@ -79,15 +79,18 @@ class CurrentPage {
   constructor() {
     __publicField(this, "source", new Source("/"));
     const correctUrl = location.href.replace(location.origin, "");
+    console.log("url from consttructor", correctUrl);
     this.source.receive(correctUrl);
   }
   receive(value) {
+    console.log("receive ourside");
     this.source.receive(value);
     return this;
   }
   receiving(guest) {
     this.source.receiving(
       new GuestMiddle(guest, (url) => {
+        console.trace("new url is", url);
         give(
           {
             title: "Loading",
@@ -211,6 +214,20 @@ class ComputedElement {
   }
 }
 
+class ClassToggle {
+  constructor(toggleClass, resetClassSelector) {
+    this.toggleClass = toggleClass;
+    this.resetClassSelector = resetClassSelector;
+  }
+  receive(element) {
+    document.querySelectorAll(this.resetClassSelector).forEach((el) => {
+      el.classList.remove(this.toggleClass);
+    });
+    element.classList.add(this.toggleClass);
+    return this;
+  }
+}
+
 class Page {
   constructor(title) {
     this.title = title;
@@ -220,5 +237,5 @@ class Page {
   }
 }
 
-export { ComputedElement, CurrentPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, Text, Visible };
+export { ClassToggle, ComputedElement, CurrentPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, Text, Visible };
 //# sourceMappingURL=patron-components.mjs.map

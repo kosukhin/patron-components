@@ -1,4 +1,3 @@
 export interface RoutePageType {
-    mounted(): void;
+  mounted(): void;
 }
-

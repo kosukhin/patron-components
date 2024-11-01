@@ -4,9 +4,9 @@ import {
   GuestChain,
   GuestType,
   Patron,
-  Source,
+  SourceType,
 } from "patron-oop";
-import { HistoryCurrentPage } from "patron-web-api";
+import { HistoryPageDocument } from "patron-web-api";
 import { RoutePageTransportType } from "src/navigation/PageFetchTransport";
 import { RouteDisplayType } from "src/navigation/RouteDisplay";
 import { RoutePageType } from "src/navigation/RoutePageType";
@@ -20,9 +20,9 @@ export interface RouteDocument {
 
 export class Navigation {
   public constructor(
-    private loading: Source<boolean>,
-    private basePath: Source<string>,
-    private currentPage: HistoryCurrentPage,
+    private loading: SourceType<boolean>,
+    private basePath: SourceType<string>,
+    private currentPage: SourceType<HistoryPageDocument>,
     private display: RouteDisplayType,
     private pageTransport: FactoryType<RoutePageTransportType>,
   ) {}
@@ -30,7 +30,7 @@ export class Navigation {
   public routes(routes: RouteDocument[]) {
     const defaultRoute = routes.find((route) => route.default);
     this.firstLoad(() => {
-      this.currentPage.page(
+      this.currentPage.receiving(
         new Patron((value) => {
           this.loading.receive(true);
           this.basePath.receiving((basePath) => {
@@ -63,7 +63,7 @@ export class Navigation {
   private firstLoad(guest: GuestType) {
     const chain = new GuestChain();
     this.basePath.receiving(chain.receiveKey("basePath"));
-    this.currentPage.page(chain.receiveKey("currentPage"));
+    this.currentPage.receiving(chain.receiveKey("currentPage"));
     chain.result(() => {
       give(null, guest);
     });

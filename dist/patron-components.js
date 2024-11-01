@@ -27,7 +27,7 @@ class Navigation {
   routes(routes) {
     const defaultRoute = routes.find((route) => route.default);
     this.firstLoad(() => {
-      this.currentPage.page(
+      this.currentPage.receiving(
         new patronOop.Patron((value) => {
           this.loading.receive(true);
           this.basePath.receiving((basePath) => {
@@ -55,7 +55,7 @@ class Navigation {
   firstLoad(guest) {
     const chain = new patronOop.GuestChain();
     this.basePath.receiving(chain.receiveKey("basePath"));
-    this.currentPage.page(chain.receiveKey("currentPage"));
+    this.currentPage.receiving(chain.receiveKey("currentPage"));
     chain.result(() => {
       patronOop.give(null, guest);
     });
@@ -81,15 +81,18 @@ class CurrentPage {
   constructor() {
     __publicField(this, "source", new patronOop.Source("/"));
     const correctUrl = location.href.replace(location.origin, "");
+    console.log("url from consttructor", correctUrl);
     this.source.receive(correctUrl);
   }
   receive(value) {
+    console.log("receive ourside");
     this.source.receive(value);
     return this;
   }
   receiving(guest) {
     this.source.receiving(
       new patronOop.GuestMiddle(guest, (url) => {
+        console.trace("new url is", url);
         patronOop.give(
           {
             title: "Loading",
@@ -213,6 +216,20 @@ class ComputedElement {
   }
 }
 
+class ClassToggle {
+  constructor(toggleClass, resetClassSelector) {
+    this.toggleClass = toggleClass;
+    this.resetClassSelector = resetClassSelector;
+  }
+  receive(element) {
+    document.querySelectorAll(this.resetClassSelector).forEach((el) => {
+      el.classList.remove(this.toggleClass);
+    });
+    element.classList.add(this.toggleClass);
+    return this;
+  }
+}
+
 class Page {
   constructor(title) {
     this.title = title;
@@ -222,6 +239,7 @@ class Page {
   }
 }
 
+exports.ClassToggle = ClassToggle;
 exports.ComputedElement = ComputedElement;
 exports.CurrentPage = CurrentPage;
 exports.Input = Input;
