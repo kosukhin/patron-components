@@ -79,18 +79,15 @@ class CurrentPage {
   constructor() {
     __publicField(this, "source");
     const correctUrl = location.href.replace(location.origin, "");
-    console.log("url from consttructor", correctUrl);
     this.source = new Source(correctUrl);
   }
   receive(value) {
-    console.log("receive outside");
     this.source.receive(value);
     return this;
   }
   receiving(guest) {
     this.source.receiving(
       new GuestMiddle(guest, (url) => {
-        console.trace("new url is", url);
         give(
           {
             title: "Loading",
@@ -237,5 +234,20 @@ class Page {
   }
 }
 
-export { ClassToggle, ComputedElement, CurrentPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, Text, Visible };
+class EntryPointPage {
+  constructor(title, entryPointUrl) {
+    this.title = title;
+    this.entryPointUrl = entryPointUrl;
+  }
+  mounted() {
+    document.title = this.title;
+    import(this.entryPointUrl).then((module) => {
+      if (module.main) {
+        module.main();
+      }
+    });
+  }
+}
+
+export { ClassToggle, ComputedElement, CurrentPage, EntryPointPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, Text, Visible };
 //# sourceMappingURL=patron-components.mjs.map

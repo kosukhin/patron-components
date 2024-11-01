@@ -81,18 +81,15 @@ class CurrentPage {
   constructor() {
     __publicField(this, "source");
     const correctUrl = location.href.replace(location.origin, "");
-    console.log("url from consttructor", correctUrl);
     this.source = new patronOop.Source(correctUrl);
   }
   receive(value) {
-    console.log("receive outside");
     this.source.receive(value);
     return this;
   }
   receiving(guest) {
     this.source.receiving(
       new patronOop.GuestMiddle(guest, (url) => {
-        console.trace("new url is", url);
         patronOop.give(
           {
             title: "Loading",
@@ -239,9 +236,25 @@ class Page {
   }
 }
 
+class EntryPointPage {
+  constructor(title, entryPointUrl) {
+    this.title = title;
+    this.entryPointUrl = entryPointUrl;
+  }
+  mounted() {
+    document.title = this.title;
+    import(this.entryPointUrl).then((module) => {
+      if (module.main) {
+        module.main();
+      }
+    });
+  }
+}
+
 exports.ClassToggle = ClassToggle;
 exports.ComputedElement = ComputedElement;
 exports.CurrentPage = CurrentPage;
+exports.EntryPointPage = EntryPointPage;
 exports.Input = Input;
 exports.Link = Link;
 exports.Navigation = Navigation;

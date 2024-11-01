@@ -96,10 +96,17 @@ declare class ClassToggle implements GuestObjectType<HTMLElement> {
     receive(element: HTMLElement): this;
 }
 
-declare class Page {
+declare class Page implements RoutePageType {
     private title;
     constructor(title: string);
     mounted(): void;
 }
 
-export { ClassToggle, ComputedElement, CurrentPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, type RouteDisplayType, type RouteDocument, type RoutePageTransportType, type RoutePageType, Text, Visible };
+declare class EntryPointPage implements RoutePageType {
+    private title;
+    private entryPointUrl;
+    constructor(title: string, entryPointUrl: string);
+    mounted(): void;
+}
+
+export { ClassToggle, ComputedElement, CurrentPage, EntryPointPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, type RouteDisplayType, type RouteDocument, type RoutePageTransportType, type RoutePageType, Text, Visible };

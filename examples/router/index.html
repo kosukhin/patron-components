@@ -67,7 +67,15 @@
     }
   </script>
     <script type="module">
-        import { Source, SourceEmpty, Factory, Patron, GuestAware, GuestMiddle, give } from 'patron-oop';
+        import {
+            Source,
+            SourceEmpty,
+            Factory,
+            Patron,
+            GuestAware,
+            GuestMiddle,
+            give
+        } from 'patron-oop';
         import {
             HistoryPoppedPage,
             HistoryNewPage
@@ -78,7 +86,7 @@
             Text,
             Input,
             Link,
-            Page,
+            EntryPointPage,
             RouteDisplay,
             PageFetchTransport,
             CurrentPage,
@@ -114,18 +122,27 @@
                 {
                     url: '/',
                     template: 'main.html',
-                    page: new Page('Главная страница'),
+                    page: new EntryPointPage(
+                        'Главная страница',
+                        '/examples/router/entry.mjs'
+                    ),
                     default: true,
                 },
                 {
                     url: '/two',
                     template: 'two.html',
-                    page: new Page('Вторая страница'),
+                    page: new EntryPointPage(
+                        'Вторая страница',
+                        '/examples/router/entry.mjs'
+                    ),
                 },
                 {
                     url: '/three',
                     template: 'three.html',
-                    page: new Page('Третья страница'),
+                    page: new EntryPointPage(
+                        'Третья страница',
+                        '/examples/router/entry.mjs'
+                    ),
                 },
             ],
         );
