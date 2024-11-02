@@ -52,7 +52,7 @@
     }
   },
   "dependencies": {
-    "patron-oop": "^1.16.0",
+    "patron-oop": "^1.17.0",
     "patron-web-api": "^1.7.0"
   }
 }

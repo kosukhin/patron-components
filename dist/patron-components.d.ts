@@ -1,5 +1,4 @@
-import { GuestType, SourceType, FactoryType, GuestAwareType, GuestObjectType } from 'patron-oop';
-import { HistoryPageDocument } from 'patron-web-api';
+import { GuestType, SourceType, FactoryType, GuestObjectType, GuestAwareType } from 'patron-oop';
 import { RoutePageTransportType as RoutePageTransportType$1 } from 'src/navigation/PageFetchTransport';
 import { RouteDisplayType as RouteDisplayType$1 } from 'src/navigation/RouteDisplay';
 import { RoutePageType as RoutePageType$1 } from 'src/navigation/RoutePageType';
@@ -17,6 +16,7 @@ declare class PageFetchTransport implements RoutePageTransportType {
 interface RouteDocument {
     url: string;
     template: string;
+    aliases?: string[];
     page: RoutePageType$1;
     default?: boolean;
 }
@@ -26,9 +26,8 @@ declare class Navigation {
     private currentPage;
     private display;
     private pageTransport;
-    constructor(loading: SourceType<boolean>, basePath: SourceType<string>, currentPage: SourceType<HistoryPageDocument>, display: RouteDisplayType$1, pageTransport: FactoryType<RoutePageTransportType$1>);
+    constructor(loading: SourceType<boolean>, basePath: SourceType<string>, currentPage: SourceType<string>, display: RouteDisplayType$1, pageTransport: FactoryType<RoutePageTransportType$1>);
     routes(routes: RouteDocument[]): void;
-    private firstLoad;
 }
 
 interface RouteDisplayType {
@@ -44,11 +43,11 @@ interface RoutePageType {
     mounted(): void;
 }
 
-declare class CurrentPage implements GuestAwareType<HistoryPageDocument>, GuestObjectType<string> {
+declare class CurrentPage implements SourceType<string> {
     private source;
     constructor();
     give(value: string): this;
-    value(guest: GuestType<HistoryPageDocument>): GuestType<HistoryPageDocument>;
+    value(guest: GuestType<string>): GuestType<string>;
 }
 
 type InputValue = number | string;

@@ -53,6 +53,11 @@
                     Третья
                 </a>
             </li>
+            <li>
+                <a href="/abrakadabra">
+                    404 page
+                </a>
+            </li>
         </ul>
     </div>
     <div class="loader">Идет загрузка</div>
@@ -87,6 +92,7 @@
             Input,
             Link,
             EntryPointPage,
+            Page,
             RouteDisplay,
             PageFetchTransport,
             CurrentPage,
@@ -100,20 +106,18 @@
         const pageLoading = new Source(false);
         pageLoading.value(new Patron(new Visible('.loader')));
 
-        const pageSource = new SourceEmpty();
-        const currentPage = new CurrentPage();
-        currentPage.value(new Patron(pageSource));
-        pageSource.value(new Patron(new HistoryNewPage()));
+        window.currentPage = new CurrentPage();
+        currentPage.value(new Patron(new HistoryNewPage()));
 
-        const historyPoppedPage = new HistoryPoppedPage(pageSource);
+        const historyPoppedPage = new HistoryPoppedPage(currentPage);
         historyPoppedPage.watchPop();
 
-        const basePathSource = new Source('/examples/router/#');
+        window.basePathSource = new Source('/examples/router/#');
 
         const navigation = new Navigation(
             pageLoading,
             basePathSource,
-            pageSource,
+            currentPage,
             new RouteDisplay('.page-content'),
             new Factory(PageFetchTransport)
         );
@@ -122,18 +126,18 @@
                 {
                     url: '/',
                     template: 'main.html',
+                    aliases: ['/examples/router/', '/examples/router/index.html'],
                     page: new EntryPointPage(
                         'Главная страница',
-                        '/examples/router/entry.mjs'
+                        '/examples/router/js/entry.mjs'
                     ),
-                    default: true,
                 },
                 {
                     url: '/two',
                     template: 'two.html',
                     page: new EntryPointPage(
                         'Вторая страница',
-                        '/examples/router/entry.mjs'
+                        '/examples/router/js/entry.mjs'
                     ),
                 },
                 {
@@ -141,8 +145,17 @@
                     template: 'three.html',
                     page: new EntryPointPage(
                         'Третья страница',
-                        '/examples/router/entry.mjs'
+                        '/examples/router/js/entry.mjs'
                     ),
+                },
+                {
+                    url: '',
+                    template: '404.html',
+                    page: new EntryPointPage(
+                        'Стрница не найдена',
+                        '/examples/router/js/404.mjs'
+                    ),
+                    default: true,
                 },
             ],
         );
@@ -152,9 +165,8 @@
 
         const url = new GuestAware((guest) => {
             basePathSource.value(new GuestMiddle(guest, (basePath) => {
-                pageSource.value(new GuestMiddle(guest, (page) => {
-                    const url = page.url ?? ''
-                    give(url.replace(basePath, ''), guest);
+                currentPage.value(new GuestMiddle(guest, (page) => {
+                    give(page.replace(basePath, ''), guest);
                 }));
             }));
         });

@@ -1,17 +1,10 @@
 import {
-  give,
-  GuestAwareType,
-  GuestMiddle,
-  GuestObjectType,
   GuestType,
   Source,
-  SourceType,
+  SourceType
 } from "patron-oop";
-import { HistoryPageDocument } from "patron-web-api";
 
-export class CurrentPage
-  implements GuestAwareType<HistoryPageDocument>, GuestObjectType<string>
-{
+export class CurrentPage implements SourceType<string> {
   private source: SourceType<string>;
 
   public constructor() {
@@ -24,18 +17,8 @@ export class CurrentPage
     return this;
   }
 
-  public value(guest: GuestType<HistoryPageDocument>) {
-    this.source.value(
-      new GuestMiddle(guest as GuestType<unknown>, (url) => {
-        give(
-          {
-            title: "Loading",
-            url,
-          },
-          guest,
-        );
-      }),
-    );
+  public value(guest: GuestType<string>) {
+    this.source.value(guest);
     return guest;
   }
 }

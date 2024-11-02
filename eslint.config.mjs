@@ -16,12 +16,17 @@ const compat = new FlatCompat({
 
 export default [
   {
+    globals: {
+      ethers: "readonly",
+    },
+  },
+  {
     ignores: ["**/node_modules", "**/dist"],
   },
   ...compat.extends(
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended"
   ),
   {
     plugins: {

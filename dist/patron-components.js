@@ -26,39 +26,38 @@ class Navigation {
   }
   routes(routes) {
     const defaultRoute = routes.find((route) => route.default);
-    this.firstLoad(() => {
-      this.currentPage.value(
-        new patronOop.Patron((value) => {
-          this.loading.give(true);
-          this.basePath.value((basePath) => {
-            basePath = basePath.replace("/#", "");
-            let currentUrl = value.url === "/" ? basePath + "/" : value.url;
-            currentUrl = currentUrl.replace("#", "").replace("//", "/");
-            let route = routes.find(
-              (route2) => basePath + route2.url === currentUrl
-            );
-            if (!route && defaultRoute) {
-              route = defaultRoute;
-            }
-            if (route) {
-              this.pageTransport.create(basePath, route.template).content((templateContent) => {
-                this.display.display(templateContent);
-                route.page.mounted();
-                this.loading.give(false);
-              });
-            }
-          });
-        })
-      );
-    });
-  }
-  firstLoad(guest) {
     const chain = new patronOop.GuestChain();
-    this.basePath.value(chain.receiveKey("basePath"));
-    this.currentPage.value(chain.receiveKey("currentPage"));
-    chain.result(() => {
-      patronOop.give(null, guest);
-    });
+    this.basePath.value(new patronOop.Patron(chain.receiveKey("basePath")));
+    this.currentPage.value(new patronOop.Patron(chain.receiveKey("currentPage")));
+    chain.result(
+      new patronOop.Patron(({ basePath, currentPage }) => {
+        basePath = basePath.replace("/#", "");
+        let currentUrl = currentPage === "/" ? basePath + "/" : currentPage;
+        currentUrl = currentUrl.replace("#", "").replace("//", "/");
+        const routeMatchedToAlias = routes.find(
+          (route2) => (route2.aliases ?? []).includes(currentUrl) && route2.url !== currentUrl
+        );
+        if (routeMatchedToAlias && routeMatchedToAlias.url !== currentPage) {
+          console.log("reload to corect url", routeMatchedToAlias, currentUrl);
+          this.currentPage.give(routeMatchedToAlias.url);
+          return;
+        }
+        let route = routes.find(
+          (route2) => basePath + route2.url === currentUrl
+        );
+        if (!route && defaultRoute) {
+          route = defaultRoute;
+        }
+        if (route) {
+          this.loading.give(true);
+          this.pageTransport.create(basePath, route.template).content((templateContent) => {
+            this.display.display(templateContent);
+            route.page.mounted();
+            this.loading.give(false);
+          });
+        }
+      })
+    );
   }
 }
 
@@ -88,17 +87,7 @@ class CurrentPage {
     return this;
   }
   value(guest) {
-    this.source.value(
-      new patronOop.GuestMiddle(guest, (url) => {
-        patronOop.give(
-          {
-            title: "Loading",
-            url
-          },
-          guest
-        );
-      })
-    );
+    this.source.value(guest);
     return guest;
   }
 }
