@@ -27,10 +27,10 @@ class Navigation {
   routes(routes) {
     const defaultRoute = routes.find((route) => route.default);
     this.firstLoad(() => {
-      this.currentPage.receiving(
+      this.currentPage.value(
         new patronOop.Patron((value) => {
-          this.loading.receive(true);
-          this.basePath.receiving((basePath) => {
+          this.loading.give(true);
+          this.basePath.value((basePath) => {
             basePath = basePath.replace("/#", "");
             let currentUrl = value.url === "/" ? basePath + "/" : value.url;
             currentUrl = currentUrl.replace("#", "").replace("//", "/");
@@ -44,7 +44,7 @@ class Navigation {
               this.pageTransport.create(basePath, route.template).content((templateContent) => {
                 this.display.display(templateContent);
                 route.page.mounted();
-                this.loading.receive(false);
+                this.loading.give(false);
               });
             }
           });
@@ -54,8 +54,8 @@ class Navigation {
   }
   firstLoad(guest) {
     const chain = new patronOop.GuestChain();
-    this.basePath.receiving(chain.receiveKey("basePath"));
-    this.currentPage.receiving(chain.receiveKey("currentPage"));
+    this.basePath.value(chain.receiveKey("basePath"));
+    this.currentPage.value(chain.receiveKey("currentPage"));
     chain.result(() => {
       patronOop.give(null, guest);
     });
@@ -83,12 +83,12 @@ class CurrentPage {
     const correctUrl = location.href.replace(location.origin, "");
     this.source = new patronOop.Source(correctUrl);
   }
-  receive(value) {
-    this.source.receive(value);
+  give(value) {
+    this.source.give(value);
     return this;
   }
-  receiving(guest) {
-    this.source.receiving(
+  value(guest) {
+    this.source.value(
       new patronOop.GuestMiddle(guest, (url) => {
         patronOop.give(
           {
@@ -107,24 +107,24 @@ class Input {
   constructor(source, selector) {
     this.source = source;
     const el = document.querySelector(selector);
-    this.source.receiving(
+    this.source.value(
       new patronOop.Patron((value) => {
         el.value = String(value);
       })
     );
     el.addEventListener("keyup", () => {
-      this.receive(el.value);
+      this.give(el.value);
     });
     el.addEventListener("change", () => {
-      this.receive(el.value);
+      this.give(el.value);
     });
   }
-  receiving(guest) {
-    this.source.receiving(guest);
+  value(guest) {
+    this.source.value(guest);
     return this;
   }
-  receive(value) {
-    this.source.receive(value);
+  give(value) {
+    this.source.give(value);
     return this;
   }
 }
@@ -133,7 +133,7 @@ class Visible {
   constructor(selector) {
     this.selector = selector;
   }
-  receive(isVisible) {
+  give(isVisible) {
     const el = document.querySelector(this.selector);
     if (el) {
       el.style.display = isVisible ? "block" : "none";
@@ -146,7 +146,7 @@ class Text {
   constructor(selector) {
     this.selector = selector;
   }
-  receive(value) {
+  give(value) {
     const element = document.querySelector(this.selector);
     if (element) {
       element.innerText = String(value);
@@ -170,8 +170,8 @@ class Link {
           href = e?.currentTarget?.getAttribute("href");
         }
         if (href) {
-          this.basePath.receiving((basePath) => {
-            this.linkSource.receive(basePath + href);
+          this.basePath.value((basePath) => {
+            this.linkSource.give(basePath + href);
           });
         }
       });
@@ -189,7 +189,7 @@ class ComputedElement {
   element(guest) {
     const chain = new patronOop.GuestChain();
     this.sources.forEach((source) => {
-      source.source.receiving(
+      source.source.value(
         new patronOop.GuestCast(guest, chain.receiveKey(source.placeholder))
       );
     });
@@ -218,7 +218,7 @@ class ClassToggle {
     this.toggleClass = toggleClass;
     this.resetClassSelector = resetClassSelector;
   }
-  receive(element) {
+  give(element) {
     document.querySelectorAll(this.resetClassSelector).forEach((el) => {
       el.classList.remove(this.toggleClass);
     });

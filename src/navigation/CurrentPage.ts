@@ -19,13 +19,13 @@ export class CurrentPage
     this.source = new Source(correctUrl);
   }
 
-  public receive(value: string): this {
-    this.source.receive(value);
+  public give(value: string): this {
+    this.source.give(value);
     return this;
   }
 
-  public receiving(guest: GuestType<HistoryPageDocument>) {
-    this.source.receiving(
+  public value(guest: GuestType<HistoryPageDocument>) {
+    this.source.value(
       new GuestMiddle(guest as GuestType<unknown>, (url) => {
         give(
           {

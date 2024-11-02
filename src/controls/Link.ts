@@ -16,8 +16,8 @@ export class Link {
           href = (e?.currentTarget as HTMLElement)?.getAttribute("href");
         }
         if (href) {
-          this.basePath.receiving((basePath) => {
-            this.linkSource.receive(basePath + href);
+          this.basePath.value((basePath) => {
+            this.linkSource.give(basePath + href);
           });
         }
       });

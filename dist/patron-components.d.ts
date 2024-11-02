@@ -47,28 +47,28 @@ interface RoutePageType {
 declare class CurrentPage implements GuestAwareType<HistoryPageDocument>, GuestObjectType<string> {
     private source;
     constructor();
-    receive(value: string): this;
-    receiving(guest: GuestType<HistoryPageDocument>): GuestType<HistoryPageDocument>;
+    give(value: string): this;
+    value(guest: GuestType<HistoryPageDocument>): GuestType<HistoryPageDocument>;
 }
 
 type InputValue = number | string;
 declare class Input implements SourceType<InputValue> {
     private source;
     constructor(source: SourceType<InputValue>, selector: string);
-    receiving(guest: GuestType<InputValue>): this;
-    receive(value: InputValue): this;
+    value(guest: GuestType<InputValue>): this;
+    give(value: InputValue): this;
 }
 
 declare class Visible implements GuestObjectType<boolean> {
     private selector;
     constructor(selector: string);
-    receive(isVisible: boolean): this;
+    give(isVisible: boolean): this;
 }
 
 declare class Text implements GuestObjectType {
     private selector;
     constructor(selector: string);
-    receive(value: unknown): this;
+    give(value: unknown): this;
 }
 
 declare class Link {
@@ -93,7 +93,7 @@ declare class ClassToggle implements GuestObjectType<HTMLElement> {
     private toggleClass;
     private resetClassSelector;
     constructor(toggleClass: string, resetClassSelector: string);
-    receive(element: HTMLElement): this;
+    give(element: HTMLElement): this;
 }
 
 declare class Page implements RoutePageType {

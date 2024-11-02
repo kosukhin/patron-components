@@ -6,7 +6,7 @@ export class ClassToggle implements GuestObjectType<HTMLElement> {
     private resetClassSelector: string,
   ) {}
 
-  public receive(element: HTMLElement): this {
+  public give(element: HTMLElement): this {
     document.querySelectorAll(this.resetClassSelector).forEach((el) => {
       el.classList.remove(this.toggleClass);
     });

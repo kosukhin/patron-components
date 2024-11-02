@@ -30,10 +30,10 @@ export class Navigation {
   public routes(routes: RouteDocument[]) {
     const defaultRoute = routes.find((route) => route.default);
     this.firstLoad(() => {
-      this.currentPage.receiving(
+      this.currentPage.value(
         new Patron((value) => {
-          this.loading.receive(true);
-          this.basePath.receiving((basePath) => {
+          this.loading.give(true);
+          this.basePath.value((basePath) => {
             basePath = basePath.replace("/#", "");
             let currentUrl = value.url === "/" ? basePath + "/" : value.url;
             currentUrl = currentUrl.replace("#", "").replace("//", "/");
@@ -51,7 +51,7 @@ export class Navigation {
                 .content((templateContent) => {
                   this.display.display(templateContent);
                   route.page.mounted();
-                  this.loading.receive(false);
+                  this.loading.give(false);
                 });
             }
           });
@@ -62,8 +62,8 @@ export class Navigation {
 
   private firstLoad(guest: GuestType) {
     const chain = new GuestChain();
-    this.basePath.receiving(chain.receiveKey("basePath"));
-    this.currentPage.receiving(chain.receiveKey("currentPage"));
+    this.basePath.value(chain.receiveKey("basePath"));
+    this.currentPage.value(chain.receiveKey("currentPage"));
     chain.result(() => {
       give(null, guest);
     });

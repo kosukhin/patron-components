@@ -21,7 +21,7 @@ export class ComputedElement {
   public element(guest: GuestType<HTMLElement>) {
     const chain = new GuestChain();
     this.sources.forEach((source) => {
-      source.source.receiving(
+      source.source.value(
         new GuestCast(guest as GuestType, chain.receiveKey(source.placeholder)),
       );
     });

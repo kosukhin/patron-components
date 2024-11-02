@@ -95,15 +95,15 @@
         } from 'patron-components';
 
         const searchInput = new Input(new Source(''), '.search-input');
-        searchInput.receiving(new Patron(new Text('.search-result')));
+        searchInput.value(new Patron(new Text('.search-result')));
 
         const pageLoading = new Source(false);
-        pageLoading.receiving(new Patron(new Visible('.loader')));
+        pageLoading.value(new Patron(new Visible('.loader')));
 
         const pageSource = new SourceEmpty();
         const currentPage = new CurrentPage();
-        currentPage.receiving(new Patron(pageSource));
-        pageSource.receiving(new Patron(new HistoryNewPage()));
+        currentPage.value(new Patron(pageSource));
+        pageSource.value(new Patron(new HistoryNewPage()));
 
         const historyPoppedPage = new HistoryPoppedPage(pageSource);
         historyPoppedPage.watchPop();
@@ -151,14 +151,14 @@
         link.watchClick('.menu');
 
         const url = new GuestAware((guest) => {
-            basePathSource.receiving(new GuestMiddle(guest, (basePath) => {
-                pageSource.receiving(new GuestMiddle(guest, (page) => {
+            basePathSource.value(new GuestMiddle(guest, (basePath) => {
+                pageSource.value(new GuestMiddle(guest, (page) => {
                     const url = page.url ?? ''
                     give(url.replace(basePath, ''), guest);
                 }));
             }));
         });
-        url.receiving(new Patron(new Text('.current-url')));
+        url.value(new Patron(new Text('.current-url')));
 
         const activeLink = new ComputedElement(
             [{ source: url, placeholder: '{url}' }],

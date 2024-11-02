@@ -8,26 +8,26 @@ export class Input implements SourceType<InputValue> {
     selector: string,
   ) {
     const el = document.querySelector(selector) as HTMLInputElement;
-    this.source.receiving(
+    this.source.value(
       new Patron((value) => {
         el.value = String(value);
       }),
     );
     el.addEventListener("keyup", () => {
-      this.receive(el.value);
+      this.give(el.value);
     });
     el.addEventListener("change", () => {
-      this.receive(el.value);
+      this.give(el.value);
     });
   }
 
-  public receiving(guest: GuestType<InputValue>) {
-    this.source.receiving(guest);
+  public value(guest: GuestType<InputValue>) {
+    this.source.value(guest);
     return this;
   }
 
-  public receive(value: InputValue) {
-    this.source.receive(value);
+  public give(value: InputValue) {
+    this.source.give(value);
     return this;
   }
 }
