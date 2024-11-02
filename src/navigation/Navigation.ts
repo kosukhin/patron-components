@@ -37,10 +37,13 @@ export class Navigation {
           route => (route.aliases && (route.aliases.includes(currentPage) || route.aliases.includes(urlWithoutBasePath)))
         );
 
-        if (routeMatchedToAlias && routeMatchedToAlias.url !== currentPage) {
+        if (routeMatchedToAlias) {
           const correctUrl = basePath + routeMatchedToAlias.url;
-          this.currentPage.give(correctUrl);
-          return;
+
+          if (correctUrl !== currentPage) {
+            this.currentPage.give(correctUrl);
+            return;
+          }
         }
 
         let route = routes.find(
