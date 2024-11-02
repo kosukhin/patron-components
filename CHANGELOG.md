@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/kosukhin/patron-web-api/compare/v1.9.0...v1.10.0) (2024-11-02)
+
+
+### Features
+
+* **main:** наработка по алиасам навигации ([57b4ac2](https://github.com/kosukhin/patron-web-api/commit/57b4ac22d02d1c1e66791c8c108be6138f51cf13))
+* **main:** сделать удобную команду релиза ([567fd60](https://github.com/kosukhin/patron-web-api/commit/567fd60f9bfaf2cad1bd3384af04c03e4a64e30b))
+
 ## [1.9.0](https://github.com/kosukhin/patron-web-api/compare/v1.8.0...v1.9.0) (2024-11-02)
 
 
