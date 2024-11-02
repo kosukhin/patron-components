@@ -29,30 +29,31 @@ class Navigation {
     this.currentPage.value(new Patron(chain.receiveKey("currentPage")));
     chain.result(
       new Patron(({ basePath, currentPage }) => {
-        basePath = basePath.replace("/#", "");
-        let currentUrl = currentPage === "/" ? basePath + "/" : currentPage;
-        currentUrl = currentUrl.replace("#", "").replace("//", "/");
+        const urlWithoutBasePath = currentPage.replace(basePath, "");
         const routeMatchedToAlias = routes.find(
-          (route2) => (route2.aliases ?? []).includes(currentUrl) && route2.url !== currentUrl
+          (route2) => route2.aliases && (route2.aliases.includes(currentPage) || route2.aliases.includes(urlWithoutBasePath))
         );
         if (routeMatchedToAlias && routeMatchedToAlias.url !== currentPage) {
-          console.log("reload to corect url", routeMatchedToAlias, currentUrl);
-          this.currentPage.give(routeMatchedToAlias.url);
+          const correctUrl = basePath + routeMatchedToAlias.url;
+          this.currentPage.give(correctUrl);
           return;
         }
         let route = routes.find(
-          (route2) => basePath + route2.url === currentUrl
+          (route2) => route2.url === urlWithoutBasePath
         );
         if (!route && defaultRoute) {
           route = defaultRoute;
         }
         if (route) {
+          const basePathWithoutHash = basePath.replace("/#", "");
           this.loading.give(true);
-          this.pageTransport.create(basePath, route.template).content((templateContent) => {
+          this.pageTransport.create(basePathWithoutHash, route.template).content((templateContent) => {
             this.display.display(templateContent);
             route.page.mounted();
             this.loading.give(false);
           });
+        } else {
+          throw new Error("No matching route in Navigation");
         }
       })
     );

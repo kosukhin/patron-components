@@ -1,4 +1,6 @@
-import { give, GuestChain, Patron, Source, GuestCast, GuestMiddle } from 'patron-oop';
+'use strict';
+
+var patronOop = require('patron-oop');
 
 class PageFetchTransport {
   constructor(basePath, template) {
@@ -9,7 +11,7 @@ class PageFetchTransport {
     fetch(this.basePath + "/" + this.template).then((result) => {
       return result.text();
     }).then((result) => {
-      give(result, guest);
+      patronOop.give(result, guest);
     });
   }
 }
@@ -24,11 +26,11 @@ class Navigation {
   }
   routes(routes) {
     const defaultRoute = routes.find((route) => route.default);
-    const chain = new GuestChain();
-    this.basePath.value(new Patron(chain.receiveKey("basePath")));
-    this.currentPage.value(new Patron(chain.receiveKey("currentPage")));
+    const chain = new patronOop.GuestChain();
+    this.basePath.value(new patronOop.Patron(chain.receiveKey("basePath")));
+    this.currentPage.value(new patronOop.Patron(chain.receiveKey("currentPage")));
     chain.result(
-      new Patron(({ basePath, currentPage }) => {
+      new patronOop.Patron(({ basePath, currentPage }) => {
         const urlWithoutBasePath = currentPage.replace(basePath, "");
         const routeMatchedToAlias = routes.find(
           (route2) => route2.aliases && (route2.aliases.includes(currentPage) || route2.aliases.includes(urlWithoutBasePath))
@@ -79,7 +81,7 @@ class CurrentPage {
   constructor() {
     __publicField(this, "source");
     const correctUrl = location.href.replace(location.origin, "");
-    this.source = new Source(correctUrl);
+    this.source = new patronOop.Source(correctUrl);
   }
   give(value) {
     this.source.give(value);
@@ -96,7 +98,7 @@ class Input {
     this.source = source;
     const el = document.querySelector(selector);
     this.source.value(
-      new Patron((value) => {
+      new patronOop.Patron((value) => {
         el.value = String(value);
       })
     );
@@ -175,14 +177,14 @@ class ComputedElement {
     this.selectorTemplate = selectorTemplate;
   }
   element(guest) {
-    const chain = new GuestChain();
+    const chain = new patronOop.GuestChain();
     this.sources.forEach((source) => {
       source.source.value(
-        new GuestCast(guest, chain.receiveKey(source.placeholder))
+        new patronOop.GuestCast(guest, chain.receiveKey(source.placeholder))
       );
     });
     chain.result(
-      new GuestMiddle(
+      new patronOop.GuestMiddle(
         guest,
         (placeholders) => {
           let selectorTemplate = this.selectorTemplate;
@@ -193,7 +195,7 @@ class ComputedElement {
             selectorTemplate
           );
           if (element) {
-            give(element, guest);
+            patronOop.give(element, guest);
           }
         }
       )
@@ -239,5 +241,16 @@ class EntryPointPage {
   }
 }
 
-export { ClassToggle, ComputedElement, CurrentPage, EntryPointPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, Text, Visible };
-//# sourceMappingURL=patron-components.js.map
+exports.ClassToggle = ClassToggle;
+exports.ComputedElement = ComputedElement;
+exports.CurrentPage = CurrentPage;
+exports.EntryPointPage = EntryPointPage;
+exports.Input = Input;
+exports.Link = Link;
+exports.Navigation = Navigation;
+exports.Page = Page;
+exports.PageFetchTransport = PageFetchTransport;
+exports.RouteDisplay = RouteDisplay;
+exports.Text = Text;
+exports.Visible = Visible;
+//# sourceMappingURL=patron-components.cjs.map

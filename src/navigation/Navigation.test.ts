@@ -17,7 +17,6 @@ test('navigation', () => {
     const display = {
         display(content: string) {
             expect(content).toBe('fake data');
-            console.log(content);
         }
     }
 
