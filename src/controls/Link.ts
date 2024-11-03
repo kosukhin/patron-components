@@ -7,19 +7,21 @@ export class Link {
   ) {}
 
   public watchClick(selector: string) {
-    const wrapperEl = document.querySelector(selector);
-    if (wrapperEl) {
-      wrapperEl.addEventListener("click", (e) => {
-        e.preventDefault();
-        let href = (e?.target as HTMLElement)?.getAttribute("href");
-        if (!href) {
-          href = (e?.currentTarget as HTMLElement)?.getAttribute("href");
-        }
-        if (href) {
-          this.basePath.value((basePath) => {
-            this.linkSource.give(basePath + href);
-          });
-        }
+    const wrapperEl = document.querySelectorAll(selector);
+    if (wrapperEl.length) {
+      wrapperEl.forEach((theElement) => {
+        theElement.addEventListener("click", (e) => {
+          e.preventDefault();
+          let href = (e?.target as HTMLElement)?.getAttribute("href");
+          if (!href) {
+            href = (e?.currentTarget as HTMLElement)?.getAttribute("href");
+          }
+          if (href) {
+            this.basePath.value((basePath) => {
+              this.linkSource.give(basePath + href);
+            });
+          }
+        });
       });
     } else {
       throw new Error(`Link wrapper not found for selector ${selector}`);
