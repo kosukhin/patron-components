@@ -41,7 +41,15 @@ class Navigation {
           }
         }
         let route = routes.find(
-          (route2) => route2.url === urlWithoutBasePath
+          (route2) => {
+            if (route2.url.indexOf("*") >= 0) {
+              const regexp = new RegExp(
+                route2.url.replaceAll("*", ".*").replaceAll("/", "/")
+              );
+              return regexp.test(urlWithoutBasePath);
+            }
+            return route2.url.replaceAll("*", "") === urlWithoutBasePath;
+          }
         );
         if (!route && defaultRoute) {
           route = defaultRoute;
@@ -151,19 +159,21 @@ class Link {
     this.basePath = basePath;
   }
   watchClick(selector) {
-    const wrapperEl = document.querySelector(selector);
-    if (wrapperEl) {
-      wrapperEl.addEventListener("click", (e) => {
-        e.preventDefault();
-        let href = e?.target?.getAttribute("href");
-        if (!href) {
-          href = e?.currentTarget?.getAttribute("href");
-        }
-        if (href) {
-          this.basePath.value((basePath) => {
-            this.linkSource.give(basePath + href);
-          });
-        }
+    const wrapperEl = document.querySelectorAll(selector);
+    if (wrapperEl.length) {
+      wrapperEl.forEach((theElement) => {
+        theElement.addEventListener("click", (e) => {
+          e.preventDefault();
+          let href = e?.target?.getAttribute("href");
+          if (!href) {
+            href = e?.currentTarget?.getAttribute("href");
+          }
+          if (href) {
+            this.basePath.value((basePath) => {
+              this.linkSource.give(basePath + href);
+            });
+          }
+        });
       });
     } else {
       throw new Error(`Link wrapper not found for selector ${selector}`);

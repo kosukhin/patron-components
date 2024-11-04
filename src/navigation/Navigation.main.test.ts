@@ -1,12 +1,13 @@
 import { Factory, give, GuestType, Source } from "patron-oop";
-import { PageFake } from "src/page/PageFake";
+import { PageFake } from "../page/PageFake";
 import { expect, test } from "vitest";
 import { Navigation } from "./Navigation";
 import { RoutePageTransportType } from "./PageFetchTransport";
 
 class FakeTransport implements RoutePageTransportType {
+    constructor(basePath = null,private template = 'null') {}
     content(guest: GuestType<string>): void {
-        give('fake data', guest)
+        give(this.template, guest)
     }
 }
 
@@ -16,7 +17,7 @@ test('navigation', () => {
     const currentPage = new Source('/some/path/');
     const display = {
         display(content: string) {
-            expect(content).toBe('fake data');
+            expect(content).toBe('main.html');
         }
     }
 
@@ -36,6 +37,7 @@ test('navigation', () => {
                 aliases: ['/some/path/'],
                 page: new PageFake(),
             },
+
         ]
     );
 

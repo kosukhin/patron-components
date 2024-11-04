@@ -47,7 +47,15 @@ export class Navigation {
         }
 
         let route = routes.find(
-          (route) => route.url === urlWithoutBasePath
+          (route) => {
+            if (route.url.indexOf('*') >= 0) {
+              const regexp = new RegExp(
+                route.url.replaceAll('*', '.*').replaceAll('/', '\/'),
+              );
+              return regexp.test(urlWithoutBasePath);
+            }
+            return route.url.replaceAll('*', '') === urlWithoutBasePath
+          }
         );
 
         if (!route && defaultRoute) {
