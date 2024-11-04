@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/kosukhin/patron-web-api/compare/v1.11.0...v1.12.0) (2024-11-04)
+
+
+### Features
+
+* **main:** в navigation добавлена обработка wildcard ([71d1708](https://github.com/kosukhin/patron-web-api/commit/71d17085450ae89dc4027024f3b13bee1f8ac92d))
+
 ## [1.11.0](https://github.com/kosukhin/patron-web-api/compare/v1.10.0...v1.11.0) (2024-11-03)
 
 
