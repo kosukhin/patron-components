@@ -3,7 +3,6 @@ import {
   GuestAwareType,
   GuestCast,
   GuestChain,
-  GuestMiddle,
   GuestType,
 } from "patron-oop";
 
@@ -27,7 +26,7 @@ export class ComputedElement {
     });
 
     chain.result(
-      new GuestMiddle(
+      new GuestCast(
         guest as GuestType,
         (placeholders: Record<string, string>) => {
           let selectorTemplate = this.selectorTemplate;

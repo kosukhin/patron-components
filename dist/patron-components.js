@@ -1,4 +1,4 @@
-import { give, GuestChain, Patron, Source, GuestCast, GuestMiddle } from 'patron-oop';
+import { give, GuestChain, Patron, Source, GuestCast } from 'patron-oop';
 
 class PageFetchTransport {
   constructor(basePath, template) {
@@ -194,7 +194,7 @@ class ComputedElement {
       );
     });
     chain.result(
-      new GuestMiddle(
+      new GuestCast(
         guest,
         (placeholders) => {
           let selectorTemplate = this.selectorTemplate;

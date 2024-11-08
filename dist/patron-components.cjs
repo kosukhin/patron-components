@@ -196,7 +196,7 @@ class ComputedElement {
       );
     });
     chain.result(
-      new patronOop.GuestMiddle(
+      new patronOop.GuestCast(
         guest,
         (placeholders) => {
           let selectorTemplate = this.selectorTemplate;
