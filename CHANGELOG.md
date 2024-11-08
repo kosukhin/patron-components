@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.0](https://github.com/kosukhin/patron-web-api/compare/v1.12.1...v1.13.0) (2024-11-08)
+
+
+### Features
+
+* **main:** убрать гость мидл ([d31fc90](https://github.com/kosukhin/patron-web-api/commit/d31fc90e8ea14bf4c8bc0ba04a4bfca3aed01d3f))
+
 ### [1.12.1](https://github.com/kosukhin/patron-web-api/compare/v1.12.0...v1.12.1) (2024-11-08)
 
 ## [1.12.0](https://github.com/kosukhin/patron-web-api/compare/v1.11.0...v1.12.0) (2024-11-04)
