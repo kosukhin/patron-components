@@ -160,25 +160,38 @@ class Link {
     this.linkSource = linkSource;
     this.basePath = basePath;
   }
-  watchClick(selector) {
+  watchClick(selector, subselector) {
     const wrapperEl = document.querySelectorAll(selector);
     if (wrapperEl.length) {
       wrapperEl.forEach((theElement) => {
         theElement.addEventListener("click", (e) => {
           e.preventDefault();
-          let href = e?.target?.getAttribute("href");
-          if (!href) {
-            href = e?.currentTarget?.getAttribute("href");
-          }
-          if (href) {
-            this.basePath.value((basePath) => {
-              this.linkSource.give(basePath + href);
+          if (subselector) {
+            theElement.querySelectorAll(subselector).forEach((theSubElement) => {
+              if (e?.target === theSubElement || e?.currentTarget === theSubElement) {
+                this.handleClick({
+                  target: theSubElement
+                });
+              }
             });
+          } else {
+            this.handleClick(e);
           }
         });
       });
     } else {
       throw new Error(`Link wrapper not found for selector ${selector}`);
+    }
+  }
+  handleClick(e) {
+    let href = e?.target?.getAttribute("href");
+    if (!href) {
+      href = e?.currentTarget?.getAttribute("href");
+    }
+    if (href) {
+      this.basePath.value((basePath) => {
+        this.linkSource.give(basePath + href);
+      });
     }
   }
 }

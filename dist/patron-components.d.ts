@@ -74,7 +74,8 @@ declare class Link {
     private linkSource;
     private basePath;
     constructor(linkSource: GuestObjectType<string>, basePath: SourceType<string>);
-    watchClick(selector: string): void;
+    watchClick(selector: string, subselector: string): void;
+    private handleClick;
 }
 
 type SourceDetailType = {
