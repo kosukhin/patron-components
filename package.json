@@ -1,6 +1,6 @@
 {
   "name": "patron-oop-components",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "description": "",
   "type": "module",
   "main": "dist/patron-components.js",

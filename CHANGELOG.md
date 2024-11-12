@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.15.0](https://github.com/kosukhin/patron-web-api/compare/v1.14.0...v1.15.0) (2024-11-12)
+
+
+### Features
+
+* **main:** link может ходить по абсолютным ссылкам ([fa40c81](https://github.com/kosukhin/patron-web-api/commit/fa40c8109bd3bba61ad624dfddd34abfbcec17fe))
+
 ## [1.14.0](https://github.com/kosukhin/patron-web-api/compare/v1.13.0...v1.14.0) (2024-11-09)
 
 
