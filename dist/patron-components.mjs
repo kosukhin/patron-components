@@ -163,7 +163,6 @@ class Link {
     if (wrapperEl.length) {
       wrapperEl.forEach((theElement) => {
         theElement.addEventListener("click", (e) => {
-          e.preventDefault();
           if (subselector) {
             theElement.querySelectorAll(subselector).forEach((theSubElement) => {
               if (e?.target === theSubElement || e?.currentTarget === theSubElement) {
@@ -186,7 +185,8 @@ class Link {
     if (!href) {
       href = e?.currentTarget?.getAttribute("href");
     }
-    if (href) {
+    if (href && href.indexOf("http") !== 0) {
+      e.preventDefault();
       this.basePath.value((basePath) => {
         this.linkSource.give(basePath + href);
       });

@@ -4,14 +4,13 @@ export class Link {
   public constructor(
     private linkSource: GuestObjectType<string>,
     private basePath: SourceType<string>,
-  ) {}
+  ) { }
 
   public watchClick(selector: string, subselector: string) {
     const wrapperEl = document.querySelectorAll(selector);
     if (wrapperEl.length) {
       wrapperEl.forEach((theElement) => {
         theElement.addEventListener("click", (e) => {
-          e.preventDefault();
           if (subselector) {
             theElement.querySelectorAll(subselector).forEach(theSubElement => {
               if (e?.target === theSubElement || e?.currentTarget === theSubElement) {
@@ -35,7 +34,8 @@ export class Link {
     if (!href) {
       href = (e?.currentTarget as HTMLElement)?.getAttribute("href");
     }
-    if (href) {
+    if (href && href.indexOf('http') !== 0) {
+      e.preventDefault();
       this.basePath.value((basePath) => {
         this.linkSource.give(basePath + href);
       });
