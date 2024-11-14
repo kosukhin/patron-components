@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://github.com/kosukhin/patron-web-api/compare/v1.15.0...v1.16.0) (2024-11-14)
+
+
+### Features
+
+* **main:** решил ошибку динамических ссылок preventDefault не работал ([7fd2ced](https://github.com/kosukhin/patron-web-api/commit/7fd2ced7597146baff4ff7d1ef97f5e3f4a2d88e))
+
 ## [1.15.0](https://github.com/kosukhin/patron-web-api/compare/v1.14.0...v1.15.0) (2024-11-12)
 
 
