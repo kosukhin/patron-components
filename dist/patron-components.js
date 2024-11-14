@@ -167,6 +167,7 @@ class Link {
             theElement.querySelectorAll(subselector).forEach((theSubElement) => {
               if (e?.target === theSubElement || e?.currentTarget === theSubElement) {
                 this.handleClick({
+                  preventDefault: e.preventDefault.bind(e),
                   target: theSubElement
                 });
               }
