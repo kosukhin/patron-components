@@ -21,4 +21,8 @@ export class CurrentPage implements SourceType<string> {
     this.source.value(guest);
     return guest;
   }
+
+  public pool() {
+    return this.source.pool();
+  }
 }

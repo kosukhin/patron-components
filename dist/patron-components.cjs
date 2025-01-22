@@ -26,10 +26,10 @@ class Navigation {
   }
   routes(routes) {
     const defaultRoute = routes.find((route) => route.default);
-    const chain = new patronOop.GuestChain();
-    this.basePath.value(new patronOop.Patron(chain.receiveKey("basePath")));
-    this.currentPage.value(new patronOop.Patron(chain.receiveKey("currentPage")));
-    chain.result(
+    const chain = new patronOop.GuestAwareAll();
+    this.basePath.value(new patronOop.Patron(chain.guestKey("basePath")));
+    this.currentPage.value(new patronOop.Patron(chain.guestKey("currentPage")));
+    chain.value(
       new patronOop.Patron(({ basePath, currentPage }) => {
         const urlWithoutBasePath = currentPage.replace(basePath, "");
         const routeMatchedToAlias = routes.find(
@@ -203,13 +203,13 @@ class ComputedElement {
     this.selectorTemplate = selectorTemplate;
   }
   element(guest) {
-    const chain = new patronOop.GuestChain();
+    const chain = new patronOop.GuestAwareAll();
     this.sources.forEach((source) => {
       source.source.value(
-        new patronOop.GuestCast(guest, chain.receiveKey(source.placeholder))
+        new patronOop.GuestCast(guest, chain.guestKey(source.placeholder))
       );
     });
-    chain.result(
+    chain.value(
       new patronOop.GuestCast(
         guest,
         (placeholders) => {

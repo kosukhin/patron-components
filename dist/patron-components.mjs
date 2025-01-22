@@ -1,4 +1,4 @@
-import { give, GuestChain, Patron, Source, GuestCast } from 'patron-oop';
+import { give, GuestAwareAll, Patron, Source, GuestCast } from 'patron-oop';
 
 class PageFetchTransport {
   constructor(basePath, template) {
@@ -24,10 +24,10 @@ class Navigation {
   }
   routes(routes) {
     const defaultRoute = routes.find((route) => route.default);
-    const chain = new GuestChain();
-    this.basePath.value(new Patron(chain.receiveKey("basePath")));
-    this.currentPage.value(new Patron(chain.receiveKey("currentPage")));
-    chain.result(
+    const chain = new GuestAwareAll();
+    this.basePath.value(new Patron(chain.guestKey("basePath")));
+    this.currentPage.value(new Patron(chain.guestKey("currentPage")));
+    chain.value(
       new Patron(({ basePath, currentPage }) => {
         const urlWithoutBasePath = currentPage.replace(basePath, "");
         const routeMatchedToAlias = routes.find(
@@ -201,13 +201,13 @@ class ComputedElement {
     this.selectorTemplate = selectorTemplate;
   }
   element(guest) {
-    const chain = new GuestChain();
+    const chain = new GuestAwareAll();
     this.sources.forEach((source) => {
       source.source.value(
-        new GuestCast(guest, chain.receiveKey(source.placeholder))
+        new GuestCast(guest, chain.guestKey(source.placeholder))
       );
     });
-    chain.result(
+    chain.value(
       new GuestCast(
         guest,
         (placeholders) => {
