@@ -1,6 +1,6 @@
 import {
   FactoryType,
-  GuestChain,
+  GuestAwareAll,
   Patron,
   SourceType
 } from "patron-oop";
@@ -23,15 +23,15 @@ export class Navigation {
     private currentPage: SourceType<string>,
     private display: RouteDisplayType,
     private pageTransport: FactoryType<RoutePageTransportType>,
-  ) {}
+  ) { }
 
   public routes(routes: RouteDocument[]) {
     const defaultRoute = routes.find((route) => route.default);
-    const chain = new GuestChain<{basePath: string, currentPage: string}>();
-    this.basePath.value(new Patron(chain.receiveKey("basePath")));
-    this.currentPage.value(new Patron(chain.receiveKey("currentPage")));
-    chain.result(
-      new Patron(({basePath, currentPage}) => {
+    const chain = new GuestAwareAll<{ basePath: string, currentPage: string }>();
+    this.basePath.value(new Patron(chain.guestKey("basePath")));
+    this.currentPage.value(new Patron(chain.guestKey("currentPage")));
+    chain.value(
+      new Patron(({ basePath, currentPage }) => {
         const urlWithoutBasePath = currentPage.replace(basePath, '');
         const routeMatchedToAlias = routes.find(
           route => (route.aliases && (route.aliases.includes(currentPage) || route.aliases.includes(urlWithoutBasePath)))

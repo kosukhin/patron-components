@@ -1,13 +1,13 @@
 import {
   give,
-  GuestAwareType,
+  GuestAwareAll,
+  GuestAwareObjectType,
   GuestCast,
-  GuestChain,
-  GuestType,
+  GuestType
 } from "patron-oop";
 
 type SourceDetailType = {
-  source: GuestAwareType;
+  source: GuestAwareObjectType<any>;
   placeholder: string;
 };
 
@@ -15,17 +15,17 @@ export class ComputedElement {
   public constructor(
     private sources: SourceDetailType[],
     private selectorTemplate: string,
-  ) {}
+  ) { }
 
   public element(guest: GuestType<HTMLElement>) {
-    const chain = new GuestChain();
+    const chain = new GuestAwareAll();
     this.sources.forEach((source) => {
       source.source.value(
-        new GuestCast(guest as GuestType, chain.receiveKey(source.placeholder)),
+        new GuestCast(guest as GuestType, chain.guestKey(source.placeholder)),
       );
     });
 
-    chain.result(
+    chain.value(
       new GuestCast(
         guest as GuestType,
         (placeholders: Record<string, string>) => {
