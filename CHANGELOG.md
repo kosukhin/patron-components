@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.17.0](https://github.com/kosukhin/patron-web-api/compare/v1.16.0...v1.17.0) (2025-01-22)
+
+
+### Features
+
+* **main:** add pull to current page ([8bb248e](https://github.com/kosukhin/patron-web-api/commit/8bb248e71a5412d39ce0f218c5b63420d9d11b77))
+* **main:** input source pool ([6516b9e](https://github.com/kosukhin/patron-web-api/commit/6516b9e8125c75450957b7307c33d837cced4db6))
+* **main:** update guest chain ([34324e6](https://github.com/kosukhin/patron-web-api/commit/34324e6756ed4ff249df7192ba2ea96d8d0fc293))
+
 ## [1.16.0](https://github.com/kosukhin/patron-web-api/compare/v1.15.0...v1.16.0) (2024-11-14)
 
 
