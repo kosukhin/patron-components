@@ -99,6 +99,9 @@ class CurrentPage {
     this.source.value(guest);
     return guest;
   }
+  pool() {
+    return this.source.pool();
+  }
 }
 
 class Input {

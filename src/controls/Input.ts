@@ -1,4 +1,4 @@
-import { GuestType, Patron, SourceType } from "patron-oop";
+import { GuestType, Patron, PatronPool, SourceType } from "patron-oop";
 
 type InputValue = number | string;
 
@@ -29,5 +29,9 @@ export class Input implements SourceType<InputValue> {
   public give(value: InputValue) {
     this.source.give(value);
     return this;
+  }
+
+  public pool() {
+    return this.source.pool();
   }
 }
