@@ -1,7 +1,7 @@
 import {
-  FactoryType,
   GuestAwareAll,
   Patron,
+  PrivateType,
   SourceType
 } from "patron-oop";
 import { RoutePageTransportType } from "src/navigation/PageFetchTransport";
@@ -22,7 +22,7 @@ export class Navigation {
     private basePath: SourceType<string>,
     private currentPage: SourceType<string>,
     private display: RouteDisplayType,
-    private pageTransport: FactoryType<RoutePageTransportType>,
+    private pageTransport: PrivateType<RoutePageTransportType>,
   ) { }
 
   public routes(routes: RouteDocument[]) {
@@ -66,7 +66,7 @@ export class Navigation {
           const basePathWithoutHash = basePath.replace('/#', '');
           this.loading.give(true);
           this.pageTransport
-            .create(basePathWithoutHash, route.template)
+            .get(basePathWithoutHash, route.template)
             .content((templateContent) => {
               this.display.display(templateContent);
               route.page.mounted();

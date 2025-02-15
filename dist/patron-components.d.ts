@@ -1,4 +1,5 @@
-import { GuestType, SourceType, FactoryType, GuestObjectType, GuestAwareType } from 'patron-oop';
+import * as patron_oop from 'patron-oop';
+import { GuestType, SourceType, FactoryType, PatronPool, GuestObjectType, GuestAwareObjectType } from 'patron-oop';
 import { RoutePageTransportType as RoutePageTransportType$1 } from 'src/navigation/PageFetchTransport';
 import { RouteDisplayType as RouteDisplayType$1 } from 'src/navigation/RouteDisplay';
 import { RoutePageType as RoutePageType$1 } from 'src/navigation/RoutePageType';
@@ -48,6 +49,7 @@ declare class CurrentPage implements SourceType<string> {
     constructor();
     give(value: string): this;
     value(guest: GuestType<string>): GuestType<string>;
+    pool(): patron_oop.PatronPool<string>;
 }
 
 type InputValue = number | string;
@@ -56,6 +58,7 @@ declare class Input implements SourceType<InputValue> {
     constructor(source: SourceType<InputValue>, selector: string);
     value(guest: GuestType<InputValue>): this;
     give(value: InputValue): this;
+    pool(): PatronPool<InputValue>;
 }
 
 declare class Visible implements GuestObjectType<boolean> {
@@ -79,7 +82,7 @@ declare class Link {
 }
 
 type SourceDetailType = {
-    source: GuestAwareType;
+    source: GuestAwareObjectType<any>;
     placeholder: string;
 };
 declare class ComputedElement {

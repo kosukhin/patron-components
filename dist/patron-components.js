@@ -128,6 +128,9 @@ class Input {
     this.source.give(value);
     return this;
   }
+  pool() {
+    return this.source.pool();
+  }
 }
 
 class Visible {
