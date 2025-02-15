@@ -1,5 +1,5 @@
 import * as patron_oop from 'patron-oop';
-import { GuestType, SourceType, FactoryType, PatronPool, GuestObjectType, GuestAwareObjectType } from 'patron-oop';
+import { GuestType, SourceType, PrivateType, PatronPool, GuestObjectType, GuestAwareObjectType } from 'patron-oop';
 import { RoutePageTransportType as RoutePageTransportType$1 } from 'src/navigation/PageFetchTransport';
 import { RouteDisplayType as RouteDisplayType$1 } from 'src/navigation/RouteDisplay';
 import { RoutePageType as RoutePageType$1 } from 'src/navigation/RoutePageType';
@@ -27,7 +27,7 @@ declare class Navigation {
     private currentPage;
     private display;
     private pageTransport;
-    constructor(loading: SourceType<boolean>, basePath: SourceType<string>, currentPage: SourceType<string>, display: RouteDisplayType$1, pageTransport: FactoryType<RoutePageTransportType$1>);
+    constructor(loading: SourceType<boolean>, basePath: SourceType<string>, currentPage: SourceType<string>, display: RouteDisplayType$1, pageTransport: PrivateType<RoutePageTransportType$1>);
     routes(routes: RouteDocument[]): void;
 }
 

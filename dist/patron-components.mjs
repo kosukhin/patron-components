@@ -57,7 +57,7 @@ class Navigation {
         if (route) {
           const basePathWithoutHash = basePath.replace("/#", "");
           this.loading.give(true);
-          this.pageTransport.create(basePathWithoutHash, route.template).content((templateContent) => {
+          this.pageTransport.get(basePathWithoutHash, route.template).content((templateContent) => {
             this.display.display(templateContent);
             route.page.mounted();
             this.loading.give(false);
