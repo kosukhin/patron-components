@@ -1,15 +1,15 @@
 import {
   GuestType,
-  Source,
-  SourceType
+  SourceWithPool,
+  SourceWithPoolType
 } from "patron-oop";
 
-export class CurrentPage implements SourceType<string> {
-  private source: SourceType<string>;
+export class CurrentPage implements SourceWithPoolType<string> {
+  private source: SourceWithPoolType<string>;
 
   public constructor() {
     const correctUrl = location.href.replace(location.origin, "");
-    this.source = new Source(correctUrl);
+    this.source = new SourceWithPool(correctUrl);
   }
 
   public give(value: string): this {

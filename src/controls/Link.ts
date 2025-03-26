@@ -1,4 +1,4 @@
-import { GuestObjectType, SourceType } from "patron-oop";
+import { GuestObjectType, SourceType, value } from "patron-oop";
 
 export class Link {
   public constructor(
@@ -37,7 +37,7 @@ export class Link {
     }
     if (href && href.indexOf('http') !== 0) {
       e.preventDefault();
-      this.basePath.value((basePath) => {
+      value(this.basePath, (basePath) => {
         this.linkSource.give(basePath + href);
       });
     }
