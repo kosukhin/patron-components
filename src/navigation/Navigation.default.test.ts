@@ -5,47 +5,48 @@ import { Navigation } from "./Navigation";
 import { RoutePageTransportType } from "./PageFetchTransport";
 
 class FakeTransport implements RoutePageTransportType {
-    constructor(basePath = null,private template = 'null') {}
-    content(guest: GuestType<string>): void {
-        give(this.template, guest)
-    }
+  constructor(
+    basePath = null,
+    private template = "null",
+  ) {}
+  content(guest: GuestType<string>): void {
+    give(this.template, guest);
+  }
 }
 
-test('navigation', () => {
-    const pageLoading = new Source(false);
-    const basePath = new Source('/some/path/#');
-    const currentPage = new Source('/some/path/unknown-page');
-    const display = {
-        display(content: string) {
-            expect(content).toBe('default.html');
-        }
-    }
+test("navigation", () => {
+  const pageLoading = new Source(false);
+  const basePath = new Source("/some/path/#");
+  const currentPage = new Source("/some/path/unknown-page");
+  const display = {
+    display(content: string) {
+      expect(content).toBe("default.html");
+    },
+  };
 
-    const navigation = new Navigation(
-        pageLoading,
-        basePath,
-        currentPage,
-        display,
-        new Factory(FakeTransport)
-    );
+  const navigation = new Navigation(
+    pageLoading,
+    basePath,
+    currentPage,
+    display,
+    new Factory(FakeTransport),
+  );
 
-    navigation.routes(
-        [
-            {
-                url: '/',
-                template: 'main.html',
-                aliases: ['/some/path/'],
-                page: new PageFake(),
-            },
-            {
-                url: '',
-                template: 'default.html',
-                aliases: ['/some/path/'],
-                page: new PageFake(),
-                default: true
-            },
-        ]
-    );
+  navigation.routes([
+    {
+      url: "/",
+      template: "main.html",
+      aliases: ["/some/path/"],
+      page: new PageFake(),
+    },
+    {
+      url: "",
+      template: "default.html",
+      aliases: ["/some/path/"],
+      page: new PageFake(),
+      default: true,
+    },
+  ]);
 
-    expect(true).toBe(true);
-})
+  expect(true).toBe(true);
+});

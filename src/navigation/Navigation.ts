@@ -1,9 +1,4 @@
-import {
-  GuestAwareAll,
-  Patron,
-  PrivateType,
-  SourceType
-} from "patron-oop";
+import { GuestAwareAll, Patron, PrivateType, SourceType } from "patron-oop";
 import { RoutePageTransportType } from "src/navigation/PageFetchTransport";
 import { RouteDisplayType } from "src/navigation/RouteDisplay";
 import { RoutePageType } from "src/navigation/RoutePageType";
@@ -23,18 +18,24 @@ export class Navigation {
     private currentPage: SourceType<string>,
     private display: RouteDisplayType,
     private pageTransport: PrivateType<RoutePageTransportType>,
-  ) { }
+  ) {}
 
   public routes(routes: RouteDocument[]) {
     const defaultRoute = routes.find((route) => route.default);
-    const chain = new GuestAwareAll<{ basePath: string, currentPage: string }>();
+    const chain = new GuestAwareAll<{
+      basePath: string;
+      currentPage: string;
+    }>();
     this.basePath.value(new Patron(chain.guestKey("basePath")));
     this.currentPage.value(new Patron(chain.guestKey("currentPage")));
     chain.value(
       new Patron(({ basePath, currentPage }) => {
-        const urlWithoutBasePath = currentPage.replace(basePath, '');
+        const urlWithoutBasePath = currentPage.replace(basePath, "");
         const routeMatchedToAlias = routes.find(
-          route => (route.aliases && (route.aliases.includes(currentPage) || route.aliases.includes(urlWithoutBasePath)))
+          (route) =>
+            route.aliases &&
+            (route.aliases.includes(currentPage) ||
+              route.aliases.includes(urlWithoutBasePath)),
         );
 
         if (routeMatchedToAlias) {
@@ -46,24 +47,22 @@ export class Navigation {
           }
         }
 
-        let route = routes.find(
-          (route) => {
-            if (route.url.indexOf('*') >= 0) {
-              const regexp = new RegExp(
-                route.url.replaceAll('*', '.*').replaceAll('/', '\/'),
-              );
-              return regexp.test(urlWithoutBasePath);
-            }
-            return route.url.replaceAll('*', '') === urlWithoutBasePath
+        let route = routes.find((route) => {
+          if (route.url.indexOf("*") >= 0) {
+            const regexp = new RegExp(
+              route.url.replaceAll("*", ".*").replaceAll("/", "/"),
+            );
+            return regexp.test(urlWithoutBasePath);
           }
-        );
+          return route.url.replaceAll("*", "") === urlWithoutBasePath;
+        });
 
         if (!route && defaultRoute) {
           route = defaultRoute;
         }
 
         if (route) {
-          const basePathWithoutHash = basePath.replace('/#', '');
+          const basePathWithoutHash = basePath.replace("/#", "");
           this.loading.give(true);
           this.pageTransport
             .get(basePathWithoutHash, route.template)
@@ -73,7 +72,7 @@ export class Navigation {
               this.loading.give(false);
             });
         } else {
-          throw new Error('No matching route in Navigation');
+          throw new Error("No matching route in Navigation");
         }
       }),
     );

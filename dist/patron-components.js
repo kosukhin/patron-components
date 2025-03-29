@@ -1,4 +1,4 @@
-import { give, GuestAwareAll, Patron, Source, GuestCast } from 'patron-oop';
+import { give, GuestAwareAll, Patron, SourceWithPool, value, SourceAll, GuestCast } from 'patron-oop';
 
 class PageFetchTransport {
   constructor(basePath, template) {
@@ -89,7 +89,7 @@ class CurrentPage {
   constructor() {
     __publicField(this, "source");
     const correctUrl = location.href.replace(location.origin, "");
-    this.source = new Source(correctUrl);
+    this.source = new SourceWithPool(correctUrl);
   }
   give(value) {
     this.source.give(value);
@@ -194,7 +194,7 @@ class Link {
     }
     if (href && href.indexOf("http") !== 0) {
       e.preventDefault();
-      this.basePath.value((basePath) => {
+      value(this.basePath, (basePath) => {
         this.linkSource.give(basePath + href);
       });
     }
@@ -207,7 +207,7 @@ class ComputedElement {
     this.selectorTemplate = selectorTemplate;
   }
   element(guest) {
-    const chain = new GuestAwareAll();
+    const chain = new SourceAll();
     this.sources.forEach((source) => {
       source.source.value(
         new GuestCast(guest, chain.guestKey(source.placeholder))

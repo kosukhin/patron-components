@@ -91,7 +91,7 @@ class CurrentPage {
   constructor() {
     __publicField(this, "source");
     const correctUrl = location.href.replace(location.origin, "");
-    this.source = new patronOop.Source(correctUrl);
+    this.source = new patronOop.SourceWithPool(correctUrl);
   }
   give(value) {
     this.source.give(value);
@@ -196,7 +196,7 @@ class Link {
     }
     if (href && href.indexOf("http") !== 0) {
       e.preventDefault();
-      this.basePath.value((basePath) => {
+      patronOop.value(this.basePath, (basePath) => {
         this.linkSource.give(basePath + href);
       });
     }
@@ -209,7 +209,7 @@ class ComputedElement {
     this.selectorTemplate = selectorTemplate;
   }
   element(guest) {
-    const chain = new patronOop.GuestAwareAll();
+    const chain = new patronOop.SourceAll();
     this.sources.forEach((source) => {
       source.source.value(
         new patronOop.GuestCast(guest, chain.guestKey(source.placeholder))

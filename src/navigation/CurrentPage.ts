@@ -1,8 +1,4 @@
-import {
-  GuestType,
-  SourceWithPool,
-  SourceWithPoolType
-} from "patron-oop";
+import { GuestType, SourceWithPool, SourceWithPoolType } from "patron-oop";
 
 export class CurrentPage implements SourceWithPoolType<string> {
   private source: SourceWithPoolType<string>;
