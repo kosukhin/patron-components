@@ -16,6 +16,7 @@
     "lint-fix": "eslint src --fix",
     "test": "vitest",
     "cz": "git add . && git cz",
+    "push-head": "git push origin HEAD",
     "test-debug": "env DEBUG=app:* vitest",
     "release": "npm run build && standard-version --no-verify && git push --follow-tags && npm publish"
   },

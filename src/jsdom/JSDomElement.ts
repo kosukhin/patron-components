@@ -1,19 +1,28 @@
-import { JSDOM } from "jsdom";
-import { give, GuestType, SourceObjectType } from "patron-oop";
+import {
+  GuestType,
+  Patron,
+  SourceObjectType,
+  SourceType,
+  SourceWithPool,
+  value,
+} from "patron-oop";
 
 export class JSDomElement implements SourceObjectType<HTMLElement> {
-  private dom = new JSDOM(`<!DOCTYPE html><body></body></html>`);
-  private element: HTMLElement;
+  private source = new SourceWithPool<HTMLElement>();
 
-  public constructor(html: string) {
-    const document = this.dom.window.document;
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    this.element = div;
+  public constructor(documentSource: SourceType<Document>, html: string) {
+    value(
+      documentSource,
+      new Patron((document) => {
+        const div = document.createElement("div");
+        div.innerHTML = html;
+        this.source.give(div.children[0] as HTMLElement);
+      }),
+    );
   }
 
   public value(guest: GuestType<HTMLElement>) {
-    give(this.element, guest);
+    value(this.source, guest);
     return this;
   }
 }
