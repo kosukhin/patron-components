@@ -2,6 +2,9 @@ export interface RouteDisplayType {
   display(content: string): void;
 }
 
+/**
+ * Renders content on selector
+ */
 export class RouteDisplay implements RouteDisplayType {
   public constructor(private selector: string) {}
 

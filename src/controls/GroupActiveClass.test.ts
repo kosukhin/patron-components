@@ -12,8 +12,9 @@ test("GroupActiveClass.test", () => {
   </div>`);
   const element = new JSDomQuerySelector(document, "#next-active");
   const classActive = new GroupActiveClass("active", ".menu-link", document);
-  element.value(classActive);
   const g = new GuestSync<Document>(null as unknown as Document);
+
+  element.value(classActive);
   document.value(g);
 
   expect(g.value().body.innerHTML).toContain(

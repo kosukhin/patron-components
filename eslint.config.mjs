@@ -24,6 +24,12 @@ export default [
     "plugin:@typescript-eslint/recommended",
   ),
   {
+    rules: {
+      "@typescript-eslint/no-explicit-any": ["off"],
+      "prettier.bracketSpacing": ["off"],
+    },
+  },
+  {
     plugins: {
       "@typescript-eslint": typescriptEslint,
     },

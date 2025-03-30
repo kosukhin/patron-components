@@ -1,11 +1,12 @@
-import { Factory, give, GuestType, Source } from "patron-oop";
-import { PageFake } from "../page/PageFake";
+import { give, GuestType, PrivateClass, SourceWithPool } from "patron-oop";
 import { expect, test } from "vitest";
+import { PageFake } from "../page/PageFake";
 import { Navigation } from "./Navigation";
 import { RoutePageTransportType } from "./PageFetchTransport";
 
 class FakeTransport implements RoutePageTransportType {
   constructor(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     basePath = null,
     private template = "null",
   ) {}
@@ -15,9 +16,9 @@ class FakeTransport implements RoutePageTransportType {
 }
 
 test("navigation", () => {
-  const pageLoading = new Source(false);
-  const basePath = new Source("/some/path/#");
-  const currentPage = new Source("/some/path/unknown-page");
+  const pageLoading = new SourceWithPool(false);
+  const basePath = new SourceWithPool("/some/path/#");
+  const currentPage = new SourceWithPool("/some/path/unknown-page");
   const display = {
     display(content: string) {
       expect(content).toBe("default.html");
@@ -29,7 +30,7 @@ test("navigation", () => {
     basePath,
     currentPage,
     display,
-    new Factory(FakeTransport),
+    new PrivateClass(FakeTransport),
   );
 
   navigation.routes([

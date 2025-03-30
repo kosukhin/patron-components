@@ -3,7 +3,7 @@ import {
   SourceAll,
   SourceObjectType,
   GuestCast,
-  GuestType
+  GuestType,
 } from "patron-oop";
 
 type SourceDetailType = {
@@ -15,7 +15,7 @@ export class ComputedElement {
   public constructor(
     private sources: SourceDetailType[],
     private selectorTemplate: string,
-  ) { }
+  ) {}
 
   public element(guest: GuestType<HTMLElement>) {
     const chain = new SourceAll();

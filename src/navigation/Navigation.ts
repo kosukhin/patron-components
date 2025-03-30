@@ -1,4 +1,12 @@
-import { GuestAwareAll, Patron, PrivateType, SourceType } from "patron-oop";
+import {
+  SourceAll,
+  Patron,
+  PrivateType,
+  SourceType,
+  value,
+  give,
+  SourceWithPoolType,
+} from "patron-oop";
 import { RoutePageTransportType } from "src/navigation/PageFetchTransport";
 import { RouteDisplayType } from "src/navigation/RouteDisplay";
 import { RoutePageType } from "src/navigation/RoutePageType";
@@ -13,22 +21,23 @@ export interface RouteDocument {
 
 export class Navigation {
   public constructor(
-    private loading: SourceType<boolean>,
+    private loading: SourceWithPoolType<boolean>,
     private basePath: SourceType<string>,
-    private currentPage: SourceType<string>,
+    private currentPage: SourceWithPoolType<string>,
     private display: RouteDisplayType,
     private pageTransport: PrivateType<RoutePageTransportType>,
   ) {}
 
   public routes(routes: RouteDocument[]) {
     const defaultRoute = routes.find((route) => route.default);
-    const chain = new GuestAwareAll<{
+    const all = new SourceAll<{
       basePath: string;
       currentPage: string;
     }>();
-    this.basePath.value(new Patron(chain.guestKey("basePath")));
-    this.currentPage.value(new Patron(chain.guestKey("currentPage")));
-    chain.value(
+    value(this.basePath, new Patron(all.guestKey("basePath")));
+    value(this.currentPage, new Patron(all.guestKey("currentPage")));
+
+    all.value(
       new Patron(({ basePath, currentPage }) => {
         const urlWithoutBasePath = currentPage.replace(basePath, "");
         const routeMatchedToAlias = routes.find(
@@ -42,7 +51,7 @@ export class Navigation {
           const correctUrl = basePath + routeMatchedToAlias.url;
 
           if (correctUrl !== currentPage) {
-            this.currentPage.give(correctUrl);
+            give(correctUrl, this.currentPage);
             return;
           }
         }
@@ -62,14 +71,17 @@ export class Navigation {
         }
 
         if (route) {
-          const basePathWithoutHash = basePath.replace("/#", "");
-          this.loading.give(true);
+          const basePathWithoutHash = basePath
+            .replace("/#", "")
+            .replace("#", "")
+            .replace(/[^/]+\.html$/, "");
+          give(true, this.loading);
           this.pageTransport
             .get(basePathWithoutHash, route.template)
             .content((templateContent) => {
               this.display.display(templateContent);
               route.page.mounted();
-              this.loading.give(false);
+              give(false, this.loading);
             });
         } else {
           throw new Error("No matching route in Navigation");
