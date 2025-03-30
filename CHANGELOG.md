@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.19.0](https://github.com/kosukhin/patron-web-api/compare/v1.18.0...v1.19.0) (2025-03-30)
+
+
+### Features
+
+* **1-issue:** rename source ([6baa09f](https://github.com/kosukhin/patron-web-api/commit/6baa09f8404a571149e82ef42e9e286f5e5db01b))
+* **1-issue:** rework source classes ([981693d](https://github.com/kosukhin/patron-web-api/commit/981693d1dc401f68f14d32a100174610d1392aba))
+* **1-issue:** tests on js dom ([1e5f732](https://github.com/kosukhin/patron-web-api/commit/1e5f732ef995ade67c9ecec1d0a262d342c77d62))
+* **1-issue:** work on source renaming ([961aba4](https://github.com/kosukhin/patron-web-api/commit/961aba4f0698481c297f6011c02acb29a4dbf918))
+
 ## [1.18.0](https://github.com/kosukhin/patron-web-api/compare/v1.17.0...v1.18.0) (2025-02-15)
 
 
