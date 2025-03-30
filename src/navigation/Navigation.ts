@@ -1,8 +1,11 @@
 import {
-  GuestAwareAll,
+  SourceAll,
   Patron,
   PrivateType,
-  SourceType
+  SourceType,
+  value,
+  give,
+  SourceWithPoolType,
 } from "patron-oop";
 import { RoutePageTransportType } from "src/navigation/PageFetchTransport";
 import { RouteDisplayType } from "src/navigation/RouteDisplay";
@@ -18,62 +21,70 @@ export interface RouteDocument {
 
 export class Navigation {
   public constructor(
-    private loading: SourceType<boolean>,
+    private loading: SourceWithPoolType<boolean>,
     private basePath: SourceType<string>,
-    private currentPage: SourceType<string>,
+    private currentPage: SourceWithPoolType<string>,
     private display: RouteDisplayType,
     private pageTransport: PrivateType<RoutePageTransportType>,
-  ) { }
+  ) {}
 
   public routes(routes: RouteDocument[]) {
     const defaultRoute = routes.find((route) => route.default);
-    const chain = new GuestAwareAll<{ basePath: string, currentPage: string }>();
-    this.basePath.value(new Patron(chain.guestKey("basePath")));
-    this.currentPage.value(new Patron(chain.guestKey("currentPage")));
-    chain.value(
+    const all = new SourceAll<{
+      basePath: string;
+      currentPage: string;
+    }>();
+    value(this.basePath, new Patron(all.guestKey("basePath")));
+    value(this.currentPage, new Patron(all.guestKey("currentPage")));
+
+    all.value(
       new Patron(({ basePath, currentPage }) => {
-        const urlWithoutBasePath = currentPage.replace(basePath, '');
+        const urlWithoutBasePath = currentPage.replace(basePath, "");
         const routeMatchedToAlias = routes.find(
-          route => (route.aliases && (route.aliases.includes(currentPage) || route.aliases.includes(urlWithoutBasePath)))
+          (route) =>
+            route.aliases &&
+            (route.aliases.includes(currentPage) ||
+              route.aliases.includes(urlWithoutBasePath)),
         );
 
         if (routeMatchedToAlias) {
           const correctUrl = basePath + routeMatchedToAlias.url;
 
           if (correctUrl !== currentPage) {
-            this.currentPage.give(correctUrl);
+            give(correctUrl, this.currentPage);
             return;
           }
         }
 
-        let route = routes.find(
-          (route) => {
-            if (route.url.indexOf('*') >= 0) {
-              const regexp = new RegExp(
-                route.url.replaceAll('*', '.*').replaceAll('/', '\/'),
-              );
-              return regexp.test(urlWithoutBasePath);
-            }
-            return route.url.replaceAll('*', '') === urlWithoutBasePath
+        let route = routes.find((route) => {
+          if (route.url.indexOf("*") >= 0) {
+            const regexp = new RegExp(
+              route.url.replaceAll("*", ".*").replaceAll("/", "/"),
+            );
+            return regexp.test(urlWithoutBasePath);
           }
-        );
+          return route.url.replaceAll("*", "") === urlWithoutBasePath;
+        });
 
         if (!route && defaultRoute) {
           route = defaultRoute;
         }
 
         if (route) {
-          const basePathWithoutHash = basePath.replace('/#', '');
-          this.loading.give(true);
+          const basePathWithoutHash = basePath
+            .replace("/#", "")
+            .replace("#", "")
+            .replace(/[^/]+\.html$/, "");
+          give(true, this.loading);
           this.pageTransport
             .get(basePathWithoutHash, route.template)
             .content((templateContent) => {
               this.display.display(templateContent);
               route.page.mounted();
-              this.loading.give(false);
+              give(false, this.loading);
             });
         } else {
-          throw new Error('No matching route in Navigation');
+          throw new Error("No matching route in Navigation");
         }
       }),
     );

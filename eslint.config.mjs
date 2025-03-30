@@ -16,18 +16,19 @@ const compat = new FlatCompat({
 
 export default [
   {
-    globals: {
-      ethers: "readonly",
-    },
-  },
-  {
     ignores: ["**/node_modules", "**/dist"],
   },
   ...compat.extends(
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
   ),
+  {
+    rules: {
+      "@typescript-eslint/no-explicit-any": ["off"],
+      "prettier.bracketSpacing": ["off"],
+    },
+  },
   {
     plugins: {
       "@typescript-eslint": typescriptEslint,

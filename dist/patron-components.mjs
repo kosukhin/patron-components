@@ -1,4 +1,4 @@
-import { give, GuestAwareAll, Patron, Source, GuestCast } from 'patron-oop';
+import { give, SourceAll, value, Patron, SourceWithPool, GuestCast, PatronOnce } from 'patron-oop';
 
 class PageFetchTransport {
   constructor(basePath, template) {
@@ -24,10 +24,10 @@ class Navigation {
   }
   routes(routes) {
     const defaultRoute = routes.find((route) => route.default);
-    const chain = new GuestAwareAll();
-    this.basePath.value(new Patron(chain.guestKey("basePath")));
-    this.currentPage.value(new Patron(chain.guestKey("currentPage")));
-    chain.value(
+    const all = new SourceAll();
+    value(this.basePath, new Patron(all.guestKey("basePath")));
+    value(this.currentPage, new Patron(all.guestKey("currentPage")));
+    all.value(
       new Patron(({ basePath, currentPage }) => {
         const urlWithoutBasePath = currentPage.replace(basePath, "");
         const routeMatchedToAlias = routes.find(
@@ -36,31 +36,29 @@ class Navigation {
         if (routeMatchedToAlias) {
           const correctUrl = basePath + routeMatchedToAlias.url;
           if (correctUrl !== currentPage) {
-            this.currentPage.give(correctUrl);
+            give(correctUrl, this.currentPage);
             return;
           }
         }
-        let route = routes.find(
-          (route2) => {
-            if (route2.url.indexOf("*") >= 0) {
-              const regexp = new RegExp(
-                route2.url.replaceAll("*", ".*").replaceAll("/", "/")
-              );
-              return regexp.test(urlWithoutBasePath);
-            }
-            return route2.url.replaceAll("*", "") === urlWithoutBasePath;
+        let route = routes.find((route2) => {
+          if (route2.url.indexOf("*") >= 0) {
+            const regexp = new RegExp(
+              route2.url.replaceAll("*", ".*").replaceAll("/", "/")
+            );
+            return regexp.test(urlWithoutBasePath);
           }
-        );
+          return route2.url.replaceAll("*", "") === urlWithoutBasePath;
+        });
         if (!route && defaultRoute) {
           route = defaultRoute;
         }
         if (route) {
-          const basePathWithoutHash = basePath.replace("/#", "");
-          this.loading.give(true);
+          const basePathWithoutHash = basePath.replace("/#", "").replace("#", "").replace(/[^/]+\.html$/, "");
+          give(true, this.loading);
           this.pageTransport.get(basePathWithoutHash, route.template).content((templateContent) => {
             this.display.display(templateContent);
             route.page.mounted();
-            this.loading.give(false);
+            give(false, this.loading);
           });
         } else {
           throw new Error("No matching route in Navigation");
@@ -89,7 +87,7 @@ class CurrentPage {
   constructor() {
     __publicField(this, "source");
     const correctUrl = location.href.replace(location.origin, "");
-    this.source = new Source(correctUrl);
+    this.source = new SourceWithPool(correctUrl);
   }
   give(value) {
     this.source.give(value);
@@ -194,7 +192,7 @@ class Link {
     }
     if (href && href.indexOf("http") !== 0) {
       e.preventDefault();
-      this.basePath.value((basePath) => {
+      value(this.basePath, (basePath) => {
         this.linkSource.give(basePath + href);
       });
     }
@@ -207,7 +205,7 @@ class ComputedElement {
     this.selectorTemplate = selectorTemplate;
   }
   element(guest) {
-    const chain = new GuestAwareAll();
+    const chain = new SourceAll();
     this.sources.forEach((source) => {
       source.source.value(
         new GuestCast(guest, chain.guestKey(source.placeholder))
@@ -233,16 +231,22 @@ class ComputedElement {
   }
 }
 
-class ClassToggle {
-  constructor(toggleClass, resetClassSelector) {
-    this.toggleClass = toggleClass;
-    this.resetClassSelector = resetClassSelector;
+class GroupActiveClass {
+  constructor(activeClass, groupSelector, document) {
+    this.activeClass = activeClass;
+    this.groupSelector = groupSelector;
+    this.document = document;
   }
   give(element) {
-    document.querySelectorAll(this.resetClassSelector).forEach((el) => {
-      el.classList.remove(this.toggleClass);
-    });
-    element.classList.add(this.toggleClass);
+    value(
+      this.document,
+      new PatronOnce((document) => {
+        document.querySelectorAll(this.groupSelector).forEach((el) => {
+          el.classList.remove(this.activeClass);
+        });
+        element.classList.add(this.activeClass);
+      })
+    );
     return this;
   }
 }
@@ -271,5 +275,5 @@ class EntryPointPage {
   }
 }
 
-export { ClassToggle, ComputedElement, CurrentPage, EntryPointPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, Text, Visible };
+export { ComputedElement, CurrentPage, EntryPointPage, GroupActiveClass, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, Text, Visible };
 //# sourceMappingURL=patron-components.mjs.map

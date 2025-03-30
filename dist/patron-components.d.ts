@@ -1,5 +1,5 @@
 import * as patron_oop from 'patron-oop';
-import { GuestType, SourceType, PrivateType, PatronPool, GuestObjectType, GuestAwareObjectType } from 'patron-oop';
+import { GuestType, SourceWithPoolType, SourceType, PrivateType, GuestObjectType, SourceObjectType } from 'patron-oop';
 import { RoutePageTransportType as RoutePageTransportType$1 } from 'src/navigation/PageFetchTransport';
 import { RouteDisplayType as RouteDisplayType$1 } from 'src/navigation/RouteDisplay';
 import { RoutePageType as RoutePageType$1 } from 'src/navigation/RoutePageType';
@@ -27,13 +27,16 @@ declare class Navigation {
     private currentPage;
     private display;
     private pageTransport;
-    constructor(loading: SourceType<boolean>, basePath: SourceType<string>, currentPage: SourceType<string>, display: RouteDisplayType$1, pageTransport: PrivateType<RoutePageTransportType$1>);
+    constructor(loading: SourceWithPoolType<boolean>, basePath: SourceType<string>, currentPage: SourceWithPoolType<string>, display: RouteDisplayType$1, pageTransport: PrivateType<RoutePageTransportType$1>);
     routes(routes: RouteDocument[]): void;
 }
 
 interface RouteDisplayType {
     display(content: string): void;
 }
+/**
+ * Renders content on selector
+ */
 declare class RouteDisplay implements RouteDisplayType {
     private selector;
     constructor(selector: string);
@@ -44,7 +47,7 @@ interface RoutePageType {
     mounted(): void;
 }
 
-declare class CurrentPage implements SourceType<string> {
+declare class CurrentPage implements SourceWithPoolType<string> {
     private source;
     constructor();
     give(value: string): this;
@@ -53,12 +56,12 @@ declare class CurrentPage implements SourceType<string> {
 }
 
 type InputValue = number | string;
-declare class Input implements SourceType<InputValue> {
+declare class Input implements SourceWithPoolType<InputValue> {
     private source;
-    constructor(source: SourceType<InputValue>, selector: string);
+    constructor(source: SourceWithPoolType<InputValue>, selector: string);
     value(guest: GuestType<InputValue>): this;
     give(value: InputValue): this;
-    pool(): PatronPool<InputValue>;
+    pool(): patron_oop.PatronPool<InputValue>;
 }
 
 declare class Visible implements GuestObjectType<boolean> {
@@ -82,7 +85,7 @@ declare class Link {
 }
 
 type SourceDetailType = {
-    source: GuestAwareObjectType<any>;
+    source: SourceObjectType<any>;
     placeholder: string;
 };
 declare class ComputedElement {
@@ -92,10 +95,16 @@ declare class ComputedElement {
     element(guest: GuestType<HTMLElement>): void;
 }
 
-declare class ClassToggle implements GuestObjectType<HTMLElement> {
-    private toggleClass;
-    private resetClassSelector;
-    constructor(toggleClass: string, resetClassSelector: string);
+/**
+ * Sets activeClass to one element of group
+ * and resets activeClass on other group elements
+ * suitable for menu active class
+ */
+declare class GroupActiveClass implements GuestObjectType<HTMLElement> {
+    private activeClass;
+    private groupSelector;
+    private document;
+    constructor(activeClass: string, groupSelector: string, document: SourceType<Document>);
     give(element: HTMLElement): this;
 }
 
@@ -112,4 +121,4 @@ declare class EntryPointPage implements RoutePageType {
     mounted(): void;
 }
 
-export { ClassToggle, ComputedElement, CurrentPage, EntryPointPage, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, type RouteDisplayType, type RouteDocument, type RoutePageTransportType, type RoutePageType, Text, Visible };
+export { ComputedElement, CurrentPage, EntryPointPage, GroupActiveClass, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, type RouteDisplayType, type RouteDocument, type RoutePageTransportType, type RoutePageType, Text, Visible };

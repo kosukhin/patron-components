@@ -1,10 +1,10 @@
-import { GuestType, Patron, PatronPool, SourceType } from "patron-oop";
+import { GuestType, Patron, SourceWithPoolType } from "patron-oop";
 
 type InputValue = number | string;
 
-export class Input implements SourceType<InputValue> {
+export class Input implements SourceWithPoolType<InputValue> {
   public constructor(
-    private source: SourceType<InputValue>,
+    private source: SourceWithPoolType<InputValue>,
     selector: string,
   ) {
     const el = document.querySelector(selector) as HTMLInputElement;

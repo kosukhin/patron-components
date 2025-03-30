@@ -16,6 +16,7 @@
     "lint-fix": "eslint src --fix",
     "test": "vitest",
     "cz": "git add . && git cz",
+    "push-head": "git push origin HEAD",
     "test-debug": "env DEBUG=app:* vitest",
     "release": "npm run build && standard-version --no-verify && git push --follow-tags && npm publish"
   },
@@ -28,19 +29,21 @@
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.12.0",
     "@rollup/plugin-terser": "^0.4.4",
+    "@types/jsdom": "^21.1.7",
     "@typescript-eslint/eslint-plugin": "^8.8.1",
     "@typescript-eslint/parser": "^8.8.1",
     "cz-customizable": "^7.0.0",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.25.1",
     "eslint": "^9.12.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "jsdom": "^26.0.0",
     "prettier": "3.3.3",
     "rollup": "^4.24.0",
     "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-esbuild": "^6.1.1",
     "standard-version": "^9.5.0",
-    "vitest": "^2.1.2"
+    "vitest": "^3.0.9"
   },
   "config": {
     "commitizen": {
@@ -51,7 +54,7 @@
     }
   },
   "dependencies": {
-    "patron-oop": "^1.40.0",
+    "patron-oop": "^1.45.0",
     "patron-web-api": "^1.13.0"
   }
 }
