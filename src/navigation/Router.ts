@@ -9,11 +9,11 @@ import {
   sourceOf,
 } from "patron-oop";
 import { HistoryNewPage, HistoryPoppedPage } from "patron-web-api";
-import { ComputedElement, GroupActiveClass, Link, Visible } from "src/controls";
-import { CurrentPage } from "src/navigation/CurrentPage";
-import { Navigation } from "src/navigation/Navigation";
-import { PageFetchTransport } from "src/navigation/PageFetchTransport";
-import { RouteDisplay } from "src/navigation/RouteDisplay";
+import { ComputedElement, GroupActiveClass, Link, Visible } from "../controls";
+import { CurrentPage } from "../navigation/CurrentPage";
+import { Navigation } from "../navigation/Navigation";
+import { PageFetchTransport } from "../navigation/PageFetchTransport";
+import { RouteDisplay } from "../navigation/RouteDisplay";
 
 type Route = {
   url: string;

@@ -98,6 +98,10 @@
       name="theme-color"
       content="#ffffff"
     />
+    <link
+      rel="stylesheet"
+      href="./assets/css/base.css"
+    />
     <script type="importmap">
       {
         "imports": {
@@ -117,25 +121,13 @@
         <div
           class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"
         >
+        <a href="/" class="text-xl flex items-center active">
+          Patron Components
+        </a>
         </div>
         <nav
           class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center"
         >
-          <a
-            class="mr-5 hover:text-gray-900"
-            href="/guest"
-            >Guest</a
-          >
-          <a
-            class="mr-5 hover:text-gray-900"
-            href="/patron"
-            >Patron</a
-          >
-          <a
-            class="mr-5 hover:text-gray-900"
-            href="/source"
-            >Source</a
-          >
         </nav>
         <button
           onclick="location.href='https://github.com/kosukhin/patron'"
@@ -181,51 +173,15 @@
       <div class="border-t border-gray-200">
         <div class="container px-5 py-8 flex flex-wrap gap-6 mx-auto">
           <div>
-            <h6
-              class="mb-4 flex flex-wrap justify-center font-semibold uppercase md:justify-start"
-            >
-              Интеграции
-            </h6>
-            <div class="flex flex-col gap-2 menu">
-            </div>
-          </div>
-          <div>
-            <h6
-              class="mb-4 flex justify-center font-semibold uppercase md:justify-start"
-            >
-              Совместимость
-            </h6>
-            <div class="flex flex-col gap-2 menu">
-            </div>
-          </div>
-          <div>
-            <h6
-              class="mb-4 flex justify-center font-semibold uppercase md:justify-start"
-            >
-              Дополнительно
-            </h6>
-            <div class="flex flex-col gap-2 menu">
-              <div class="flex gap-1 items-center">
-                <a href="/utils">Утилиты</a>
-              </div>
-              <div class="flex gap-1 items-center">
-                <a href="/terminology">Термины</a>
-              </div>
-              <div class="flex gap-1 items-center">
-                <a href="/examples">Примеры</a>
-              </div>
-            </div>
-          </div>
-          <div>
             <h6 class="mb-4 flex font-semibold uppercase md:justify-start">
               Библиотеки
             </h6>
             <div class="flex flex-col gap-2 menu">
               <div class="flex gap-1 items-center">
                 <a
-                  href="https://kosukhin.github.io/patron-components.site/"
+                  href="https://kosukhin.github.io/patron/#/"
                   target="_blank"
-                  >Patron-Компоненты</a
+                  >Patron</a
                 >
               </div>
               <div class="flex gap-1 items-center">
@@ -263,7 +219,7 @@
           <span
             class="sm:ml-auto sm:mt-0 mt-2 sm:w-auto w-full sm:text-left text-center text-gray-500 text-sm"
           >
-            for responsible objects
+            patron components
           </span>
         </div>
       </div>
