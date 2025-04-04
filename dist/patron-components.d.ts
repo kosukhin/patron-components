@@ -55,6 +55,20 @@ declare class CurrentPage implements SourceWithPoolType<string> {
     pool(): patron_oop.PatronPool<string>;
 }
 
+type Route = {
+    url: string;
+    template: string;
+    aliases: string[];
+    page: any;
+};
+declare class Router {
+    private loaderSelector;
+    private navigationResultSelector;
+    private menuSelector;
+    constructor(loaderSelector: string, navigationResultSelector: string, menuSelector: string);
+    routes(routes: Route[], currentPage: any, basePathSource: any, afterPageLoaded?: () => void): void;
+}
+
 type InputValue = number | string;
 declare class Input implements SourceWithPoolType<InputValue> {
     private source;
@@ -80,7 +94,7 @@ declare class Link {
     private linkSource;
     private basePath;
     constructor(linkSource: GuestObjectType<string>, basePath: SourceType<string>);
-    watchClick(selector: string, subselector: string): void;
+    watchClick(selector: string, subselector?: string): void;
     private handleClick;
 }
 
@@ -121,4 +135,4 @@ declare class EntryPointPage implements RoutePageType {
     mounted(): void;
 }
 
-export { ComputedElement, CurrentPage, EntryPointPage, GroupActiveClass, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, type RouteDisplayType, type RouteDocument, type RoutePageTransportType, type RoutePageType, Text, Visible };
+export { ComputedElement, CurrentPage, EntryPointPage, GroupActiveClass, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, type RouteDisplayType, type RouteDocument, type RoutePageTransportType, type RoutePageType, Router, Text, Visible };

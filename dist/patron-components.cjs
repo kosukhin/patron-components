@@ -1,6 +1,12 @@
 'use strict';
 
 var patronOop = require('patron-oop');
+var patronWebApi = require('patron-web-api');
+var controls = require('src/controls');
+var CurrentPage$1 = require('src/navigation/CurrentPage');
+var Navigation$1 = require('src/navigation/Navigation');
+var PageFetchTransport$1 = require('src/navigation/PageFetchTransport');
+var RouteDisplay$1 = require('src/navigation/RouteDisplay');
 
 class PageFetchTransport {
   constructor(basePath, template) {
@@ -101,6 +107,84 @@ class CurrentPage {
   }
   pool() {
     return this.source.pool();
+  }
+}
+
+class Router {
+  constructor(loaderSelector, navigationResultSelector, menuSelector) {
+    this.loaderSelector = loaderSelector;
+    this.navigationResultSelector = navigationResultSelector;
+    this.menuSelector = menuSelector;
+  }
+  routes(routes, currentPage, basePathSource, afterPageLoaded) {
+    if (!currentPage) {
+      currentPage = new CurrentPage$1.CurrentPage();
+    }
+    currentPage.value(new patronOop.Patron(new patronWebApi.HistoryNewPage()));
+    const [basePath] = location.href.replace(location.origin, "").split("#");
+    if (!basePathSource) {
+      basePathSource = new patronOop.SourceWithPool(
+        `${basePath}#`.replace("index.html", "").replace("//", "/")
+      );
+    }
+    const pageLoading = new patronOop.SourceWithPool(false);
+    pageLoading.value(new patronOop.Patron(new controls.Visible(this.loaderSelector)));
+    const historyPoppedPage = new patronWebApi.HistoryPoppedPage(currentPage);
+    historyPoppedPage.watchPop();
+    const navigation = new Navigation$1.Navigation(
+      pageLoading,
+      basePathSource,
+      currentPage,
+      new RouteDisplay$1.RouteDisplay(this.navigationResultSelector),
+      new patronOop.PrivateClass(PageFetchTransport$1.PageFetchTransport)
+    );
+    navigation.routes(routes);
+    const link = new controls.Link(currentPage, basePathSource);
+    link.watchClick(this.menuSelector);
+    const urlChain = new patronOop.SourceAll();
+    basePathSource.value(new patronOop.Patron(urlChain.guestKey("basePath")));
+    currentPage.value(new patronOop.Patron(urlChain.guestKey("page")));
+    const url = new patronOop.Source((guest) => {
+      urlChain.value(
+        new patronOop.GuestCast(guest, ({ basePath: basePath2, page }) => {
+          patronOop.give(page.replace(basePath2, ""), guest);
+        })
+      );
+    });
+    const activeLink = new controls.ComputedElement(
+      [{ source: url, placeholder: "{url}" }],
+      `${this.menuSelector} a[href="{url}"]`
+    );
+    activeLink.element(
+      new patronOop.Patron(
+        new controls.GroupActiveClass(
+          "active",
+          `${this.menuSelector} a`,
+          patronOop.sourceOf(document)
+        )
+      )
+    );
+    pageLoading.value(
+      new patronOop.Patron((isInLoading) => {
+        if (isInLoading) {
+          return;
+        }
+        if (afterPageLoaded) {
+          afterPageLoaded();
+        }
+        const divDestination = document.querySelector(
+          this.navigationResultSelector
+        );
+        if (divDestination) {
+          divDestination.querySelectorAll("script").forEach((x) => {
+            const sc = document.createElement("script");
+            sc.setAttribute("type", "module");
+            sc.appendChild(document.createTextNode(x.innerText));
+            divDestination.appendChild(sc);
+          });
+        }
+      })
+    );
   }
 }
 
@@ -287,6 +371,7 @@ exports.Navigation = Navigation;
 exports.Page = Page;
 exports.PageFetchTransport = PageFetchTransport;
 exports.RouteDisplay = RouteDisplay;
+exports.Router = Router;
 exports.Text = Text;
 exports.Visible = Visible;
 //# sourceMappingURL=patron-components.cjs.map

@@ -1,4 +1,10 @@
-import { give, SourceAll, value, Patron, SourceWithPool, GuestCast, PatronOnce } from 'patron-oop';
+import { give, SourceAll, value, Patron, SourceWithPool, PrivateClass, Source, GuestCast, sourceOf, PatronOnce } from 'patron-oop';
+import { HistoryNewPage, HistoryPoppedPage } from 'patron-web-api';
+import { Visible as Visible$1, Link as Link$1, ComputedElement as ComputedElement$1, GroupActiveClass as GroupActiveClass$1 } from 'src/controls';
+import { CurrentPage as CurrentPage$1 } from 'src/navigation/CurrentPage';
+import { Navigation as Navigation$1 } from 'src/navigation/Navigation';
+import { PageFetchTransport as PageFetchTransport$1 } from 'src/navigation/PageFetchTransport';
+import { RouteDisplay as RouteDisplay$1 } from 'src/navigation/RouteDisplay';
 
 class PageFetchTransport {
   constructor(basePath, template) {
@@ -99,6 +105,84 @@ class CurrentPage {
   }
   pool() {
     return this.source.pool();
+  }
+}
+
+class Router {
+  constructor(loaderSelector, navigationResultSelector, menuSelector) {
+    this.loaderSelector = loaderSelector;
+    this.navigationResultSelector = navigationResultSelector;
+    this.menuSelector = menuSelector;
+  }
+  routes(routes, currentPage, basePathSource, afterPageLoaded) {
+    if (!currentPage) {
+      currentPage = new CurrentPage$1();
+    }
+    currentPage.value(new Patron(new HistoryNewPage()));
+    const [basePath] = location.href.replace(location.origin, "").split("#");
+    if (!basePathSource) {
+      basePathSource = new SourceWithPool(
+        `${basePath}#`.replace("index.html", "").replace("//", "/")
+      );
+    }
+    const pageLoading = new SourceWithPool(false);
+    pageLoading.value(new Patron(new Visible$1(this.loaderSelector)));
+    const historyPoppedPage = new HistoryPoppedPage(currentPage);
+    historyPoppedPage.watchPop();
+    const navigation = new Navigation$1(
+      pageLoading,
+      basePathSource,
+      currentPage,
+      new RouteDisplay$1(this.navigationResultSelector),
+      new PrivateClass(PageFetchTransport$1)
+    );
+    navigation.routes(routes);
+    const link = new Link$1(currentPage, basePathSource);
+    link.watchClick(this.menuSelector);
+    const urlChain = new SourceAll();
+    basePathSource.value(new Patron(urlChain.guestKey("basePath")));
+    currentPage.value(new Patron(urlChain.guestKey("page")));
+    const url = new Source((guest) => {
+      urlChain.value(
+        new GuestCast(guest, ({ basePath: basePath2, page }) => {
+          give(page.replace(basePath2, ""), guest);
+        })
+      );
+    });
+    const activeLink = new ComputedElement$1(
+      [{ source: url, placeholder: "{url}" }],
+      `${this.menuSelector} a[href="{url}"]`
+    );
+    activeLink.element(
+      new Patron(
+        new GroupActiveClass$1(
+          "active",
+          `${this.menuSelector} a`,
+          sourceOf(document)
+        )
+      )
+    );
+    pageLoading.value(
+      new Patron((isInLoading) => {
+        if (isInLoading) {
+          return;
+        }
+        if (afterPageLoaded) {
+          afterPageLoaded();
+        }
+        const divDestination = document.querySelector(
+          this.navigationResultSelector
+        );
+        if (divDestination) {
+          divDestination.querySelectorAll("script").forEach((x) => {
+            const sc = document.createElement("script");
+            sc.setAttribute("type", "module");
+            sc.appendChild(document.createTextNode(x.innerText));
+            divDestination.appendChild(sc);
+          });
+        }
+      })
+    );
   }
 }
 
@@ -275,5 +359,5 @@ class EntryPointPage {
   }
 }
 
-export { ComputedElement, CurrentPage, EntryPointPage, GroupActiveClass, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, Text, Visible };
+export { ComputedElement, CurrentPage, EntryPointPage, GroupActiveClass, Input, Link, Navigation, Page, PageFetchTransport, RouteDisplay, Router, Text, Visible };
 //# sourceMappingURL=patron-components.mjs.map
