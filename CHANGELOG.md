@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.20.0](https://github.com/kosukhin/patron-web-api/compare/v1.19.0...v1.20.0) (2025-04-05)
+
+
+### Features
+
+* **3-issue:** docs init ([13caf63](https://github.com/kosukhin/patron-web-api/commit/13caf638789914c5099e50897fb9e0c9e0b239db))
+* **3-issue:** initial docs template done ([fca3397](https://github.com/kosukhin/patron-web-api/commit/fca33976331ca25be7bbc2c43beb2e1998b5749e))
+* **main:** initial docs files ([1299608](https://github.com/kosukhin/patron-web-api/commit/12996082d98188256fefc0673a5f1e35df934421))
+
 ## [1.19.0](https://github.com/kosukhin/patron-web-api/compare/v1.18.0...v1.19.0) (2025-03-30)
 
 
