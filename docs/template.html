@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta
+      http-equiv="X-UA-Compatible"
+      content="ie=edge"
+    />
+    <title>Идет загрузка...</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+    <link
+      rel="apple-touch-icon"
+      sizes="57x57"
+      href="./assets/favicon/apple-icon-57x57.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="60x60"
+      href="./assets/favicon/apple-icon-60x60.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="72x72"
+      href="./assets/favicon/apple-icon-72x72.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="./assets/favicon/apple-icon-76x76.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="114x114"
+      href="./assets/favicon/apple-icon-114x114.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="./assets/favicon/apple-icon-120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="144x144"
+      href="./assets/favicon/apple-icon-144x144.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="./assets/favicon/apple-icon-152x152.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assets/favicon/apple-icon-180x180.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="./assets/favicon/android-icon-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="./assets/favicon/favicon-96x96.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./assets/favicon/favicon-16x16.png"
+    />
+    <meta
+      name="msapplication-TileColor"
+      content="#ffffff"
+    />
+    <meta
+      name="msapplication-TileImage"
+      content="./assets/favicon/ms-icon-144x144.png"
+    />
+    <meta
+      name="theme-color"
+      content="#ffffff"
+    />
+    <link
+      rel="stylesheet"
+      href="./assets/css/base.css"
+    />
+    <script type="importmap">
+      {
+        "imports": {
+          "patron-oop": "TPL_PATRON_OOP",
+          "patron-web-api": "TPL_PATRON_WEB_API",
+          "patron-components": "TPL_PATRON_COMPONENTS"
+        }
+      }
+    </script>
+  </head>
+
+  <body class="flex flex-col h-full global-body body-loading">
+    <header class="text-gray-600 body-font">
+      <div
+        class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center menu"
+      >
+        <div
+          class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"
+        >
+        <a href="/" class="text-xl flex items-center active">
+          Patron Components
+        </a>
+        </div>
+        <nav
+          class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center"
+        >
+        </nav>
+        <button
+          onclick="location.href='https://github.com/kosukhin/patron'"
+          class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+        >
+          <img
+            src="./assets/img/github_16.jpg"
+            width="16"
+            height="16"
+          />
+          GitHub
+          <svg
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            class="w-4 h-4 ml-1"
+            viewBox="0 0 24 24"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+    <article class="container mx-auto p-5">
+      <div class="loader">
+        <div class="w-full flex justify-center">
+          <div
+            class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-indigo-500 motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status"
+          >
+            <span
+              class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+              >Loading...</span
+            >
+          </div>
+        </div>
+      </div>
+      <div class="page-area"></div>
+    </article>
+    <footer class="text-gray-600 body-font mt-auto">
+      <div class="border-t border-gray-200">
+        <div class="container px-5 py-8 flex flex-wrap gap-6 mx-auto">
+          <div>
+            <h6 class="mb-4 flex font-semibold uppercase md:justify-start">
+              Библиотеки
+            </h6>
+            <div class="flex flex-col gap-2 menu">
+              <div class="flex gap-1 items-center">
+                <a
+                  href="https://kosukhin.github.io/patron/#/"
+                  target="_blank"
+                  >Patron</a
+                >
+              </div>
+              <div class="flex gap-1 items-center">
+                <a
+                  href="https://kosukhin.github.io/patron-web-api.site/"
+                  target="_blank"
+                  >Patron-WEB-API</a
+                >
+              </div>
+              <div class="flex gap-1 items-center">
+                <a
+                  href="https://kosukhin.github.io/patron-web-api.site/"
+                  target="_blank"
+                  >Patron Редактор схем</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-100">
+        <div
+          class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row"
+        >
+          <p class="text-gray-500 text-sm">
+            © 2025 Patron —
+            <a
+              href="https://github.com/kosukhin/patron"
+              class="text-gray-600 ml-1"
+              target="_blank"
+              rel="noopener noreferrer"
+              >@patron-oop</a
+            >
+          </p>
+          <span
+            class="sm:ml-auto sm:mt-0 mt-2 sm:w-auto w-full sm:text-left text-center text-gray-500 text-sm"
+          >
+            patron components
+          </span>
+        </div>
+      </div>
+    </footer>
+    <script
+      src="./assets/js/index.mjs"
+      type="module"
+    ></script>
+  </body>
+</html>
