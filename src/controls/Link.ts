@@ -6,7 +6,7 @@ export class Link {
     private basePath: SourceType<string>,
   ) {}
 
-  public watchClick(selector: string, subselector: string) {
+  public watchClick(selector: string, subselector?: string) {
     const wrapperEl = document.querySelectorAll(selector);
     if (wrapperEl.length) {
       wrapperEl.forEach((theElement) => {
