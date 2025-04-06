@@ -19,7 +19,8 @@
     "cz": "git add . && git cz",
     "push-head": "git push origin HEAD",
     "test-debug": "env DEBUG=app:* vitest",
-    "release": "npm run build && standard-version --no-verify && git push --follow-tags && npm publish"
+    "release": "npm run build && standard-version --no-verify && git push --follow-tags && npm publish",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,7 @@
     "eslint": "^9.12.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^9.1.7",
     "jsdom": "^26.0.0",
     "prettier": "3.3.3",
     "rollup": "^4.24.0",
