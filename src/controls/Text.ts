@@ -1,5 +1,8 @@
 import { GuestObjectType } from "patron-oop";
 
+/**
+ * @deprecated Move to web api
+ */
 export class Text implements GuestObjectType {
   public constructor(private selector: string) {}
 

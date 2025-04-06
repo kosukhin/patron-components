@@ -11,6 +11,9 @@ type SourceDetailType = {
   placeholder: string;
 };
 
+/**
+ * @deprecated use https://kosukhin.github.io/patron-web-api/#/dom/element
+ */
 export class ComputedElement {
   public constructor(
     private sources: SourceDetailType[],

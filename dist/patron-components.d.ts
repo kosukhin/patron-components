@@ -47,6 +47,9 @@ interface RoutePageType {
     mounted(): void;
 }
 
+/**
+ * @deprecated move to web api
+ */
 declare class CurrentPage implements SourceWithPoolType<string> {
     private source;
     constructor();
@@ -70,6 +73,9 @@ declare class Router {
 }
 
 type InputValue = number | string;
+/**
+ * @deprecated move to web api
+ */
 declare class Input implements SourceWithPoolType<InputValue> {
     private source;
     constructor(source: SourceWithPoolType<InputValue>, selector: string);
@@ -78,18 +84,27 @@ declare class Input implements SourceWithPoolType<InputValue> {
     pool(): patron_oop.PatronPool<InputValue>;
 }
 
+/**
+ * @deprecated move to web api
+ */
 declare class Visible implements GuestObjectType<boolean> {
     private selector;
     constructor(selector: string);
     give(isVisible: boolean): this;
 }
 
+/**
+ * @deprecated Move to web api
+ */
 declare class Text implements GuestObjectType {
     private selector;
     constructor(selector: string);
     give(value: unknown): this;
 }
 
+/**
+ * @deprecated move to web api
+ */
 declare class Link {
     private linkSource;
     private basePath;
@@ -102,6 +117,9 @@ type SourceDetailType = {
     source: SourceObjectType<any>;
     placeholder: string;
 };
+/**
+ * @deprecated use https://kosukhin.github.io/patron-web-api/#/dom/element
+ */
 declare class ComputedElement {
     private sources;
     private selectorTemplate;
@@ -113,6 +131,8 @@ declare class ComputedElement {
  * Sets activeClass to one element of group
  * and resets activeClass on other group elements
  * suitable for menu active class
+ *
+ * @deprecated heavily related to web api needs refactoring
  */
 declare class GroupActiveClass implements GuestObjectType<HTMLElement> {
     private activeClass;

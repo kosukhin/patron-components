@@ -2,6 +2,9 @@ import { GuestType, Patron, SourceWithPoolType } from "patron-oop";
 
 type InputValue = number | string;
 
+/**
+ * @deprecated move to web api
+ */
 export class Input implements SourceWithPoolType<InputValue> {
   public constructor(
     private source: SourceWithPoolType<InputValue>,

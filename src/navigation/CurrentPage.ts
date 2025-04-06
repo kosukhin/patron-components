@@ -1,5 +1,8 @@
 import { GuestType, SourceWithPool, SourceWithPoolType } from "patron-oop";
 
+/**
+ * @deprecated move to web api
+ */
 export class CurrentPage implements SourceWithPoolType<string> {
   private source: SourceWithPoolType<string>;
 

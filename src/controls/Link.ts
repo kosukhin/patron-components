@@ -1,5 +1,8 @@
 import { GuestObjectType, SourceType, value } from "patron-oop";
 
+/**
+ * @deprecated move to web api
+ */
 export class Link {
   public constructor(
     private linkSource: GuestObjectType<string>,

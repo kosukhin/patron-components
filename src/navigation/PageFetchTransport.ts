@@ -4,6 +4,10 @@ export interface RoutePageTransportType {
   content(guest: GuestType<string>): void;
 }
 
+/**
+ * Not needed anymore same thing in web api existed
+ * @deprecated
+ */
 export class PageFetchTransport implements RoutePageTransportType {
   public constructor(
     private basePath: string,

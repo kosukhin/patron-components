@@ -1,5 +1,8 @@
 import { RoutePageType } from "../navigation";
 
+/**
+ * @deprecated not needed
+ */
 export class EntryPointPage implements RoutePageType {
   public constructor(
     private title: string,

@@ -1,5 +1,8 @@
 import { GuestObjectType } from "patron-oop";
 
+/**
+ * @deprecated move to web api
+ */
 export class Visible implements GuestObjectType<boolean> {
   public constructor(private selector: string) {}
 

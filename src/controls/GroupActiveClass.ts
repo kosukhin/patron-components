@@ -4,6 +4,8 @@ import { GuestObjectType, PatronOnce, SourceType, value } from "patron-oop";
  * Sets activeClass to one element of group
  * and resets activeClass on other group elements
  * suitable for menu active class
+ *
+ * @deprecated heavily related to web api needs refactoring
  */
 export class GroupActiveClass implements GuestObjectType<HTMLElement> {
   public constructor(
